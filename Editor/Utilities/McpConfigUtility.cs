@@ -40,14 +40,8 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                     throw new Exception("Failed to find package path for UGS CLI MCP");
                 }
 
-                // The index.js will be in the parent directory of our package
-                string parentDir = Directory.GetParent(packagePath)?.FullName;
-                if (string.IsNullOrEmpty(parentDir))
-                {
-                    throw new Exception("Failed to find parent directory of package");
-                }
-
-                string ugsCliMcpPath = Path.Combine(parentDir, "ugs-cli-mcp", "build", "index.js");
+                // The index.js will be in the build directory of our package
+                string ugsCliMcpPath = Path.Combine(packagePath, "build", "index.js");
                 if (!File.Exists(ugsCliMcpPath))
                 {
                     Debug.LogWarning($"UGS CLI MCP index.js not found at expected path: {ugsCliMcpPath}");
