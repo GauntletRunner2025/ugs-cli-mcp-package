@@ -1,0 +1,10 @@
+{
+    "name": "Gauntletrunner2025.UgsCliMcp.Editor",
+    "references": [
+      "Gauntletrunner2025.UgsCliMcp"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

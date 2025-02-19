@@ -1,0 +1,14 @@
+{
+    "name": "Gauntletrunner2025.UgsCliMcp.Editor.Tests",
+    "references": [
+        "Gauntletrunner2025.UgsCliMcp.Editor",
+        "Gauntletrunner2025.UgsCliMcp"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

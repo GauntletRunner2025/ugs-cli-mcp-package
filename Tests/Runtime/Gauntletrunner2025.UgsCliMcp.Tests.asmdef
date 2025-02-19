@@ -1,0 +1,11 @@
+{
+    "name": "Gauntletrunner2025.UgsCliMcp.Tests",
+    "references": [
+        "Gauntletrunner2025.UgsCliMcp"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

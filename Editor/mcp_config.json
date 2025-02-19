@@ -1,0 +1,10 @@
+{
+    "mcpServers": {
+      "ugs-cli-mcp": {
+        "command": "node",
+        "args": [
+            "C:\\gauntletai\\ugs-cli-mcp\\build\\index.js"
+        ]
+     }
+    }
+}
