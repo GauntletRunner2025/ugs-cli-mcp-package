@@ -8,7 +8,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class PackagePathUtility
     {
-        private const string PackageName = "com.gauntletrunner2025.ugs-cli-mcp";
+        private const string PackageName = "com.gauntletrunner2025.ugs-cli-mcp-core";
         private const string AssetsPath = "Assets/com.gauntletrunner2025.ugs-cli-mcp";
 
         public static string GetPackagePath()
