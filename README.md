@@ -4,7 +4,7 @@ After installing this package, Windsurf IDE, in the Cascade chat, agent mode, wi
 To install:
 Step 1
 In Unity, open up the Package Manager, click the Add Package drop down and click "Install package from git url" and paste in: 
-https://github.com/GauntletRunner2025/ugs-cli-mcp-package.git
+https://github.com/GauntletRunner2025/ugs-cli-mcp-core-package.git
 
 If the package imports successfully, a welcome window should pop up and give further instructions. Otherwise, try the dropdown under Tools.
 
