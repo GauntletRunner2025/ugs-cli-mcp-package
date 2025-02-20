@@ -22,12 +22,12 @@ export function registerCreateCustomIndex(server: McpServer) {
             "visibility": z.enum(["default", "private"]).optional(),
             "body": z.string().optional(),
         },
-        async ({ 
-            fields,
-            visibility,
-            body
-        } = {}) => {
-
+        async (
+            { 
+                fields,
+                visibility,
+                body
+            } = {}) => {
             try {
                 if (!fields || fields.length === 0) {
                     return {
