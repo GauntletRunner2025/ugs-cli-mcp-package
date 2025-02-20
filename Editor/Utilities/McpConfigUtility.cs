@@ -68,7 +68,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 }
 
                 // The index.js will be in the build directory of our package
-                string ugsCliMcpPath = Path.Combine(packagePath, "ugs-cli-mcp~", "build", "index.js");
+                string ugsCliMcpPath = Path.Combine(packagePath, "ugs-cli-mcp-core~", "build", "index.js");
                 if (!File.Exists(ugsCliMcpPath))
                 {
                     Debug.LogWarning($"UGS CLI MCP index.js not found at expected path: {ugsCliMcpPath}");

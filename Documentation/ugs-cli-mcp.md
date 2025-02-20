@@ -18,7 +18,7 @@ Use this template to create preliminary, high-level documentation meant to intro
 		```
 >>>
 
-# About &lt;package name&gt;
+# About ugs-cli-mcp-core
 
 >>>
 Name the heading of the first topic after the **displayName** of the package as it appears in the package manifest.
@@ -33,11 +33,11 @@ There are two types of packages:
 Choose one of the following introductory paragraphs that best fits the package:
 >>>
 
-Use the &lt;package name&gt; package to &lt;list of the main uses for the package&gt;. For example, use &lt;package name&gt; to create/generate/extend/capture &lt;mention major use case, or a good example of what the package can be used for&gt;. The &lt;package name&gt; package also includes &lt;other relevant features or uses&gt;.
+Use the ugs-cli-mcp-core package to &lt;list of the main uses for the package&gt;. For example, use ugs-cli-mcp-core to create/generate/extend/capture &lt;mention major use case, or a good example of what the package can be used for&gt;. The ugs-cli-mcp-core package also includes &lt;other relevant features or uses&gt;.
 
 > *or*
 
-The &lt;package name&gt; package includes examples of &lt;name of asset type, model, prefabs, and/or other GameObjects in the package&gt;. For more information, see &lt;xref to topic in the Unity Manual&gt;.
+The ugs-cli-mcp-core package includes examples of &lt;name of asset type, model, prefabs, and/or other GameObjects in the package&gt;. For more information, see &lt;xref to topic in the Unity Manual&gt;.
 
 >>>
 **_Examples:_** 
@@ -49,7 +49,7 @@ Here are some examples for reference only. Do not include these in the final doc
 *The Timeline Examples package includes examples of Timeline assets, Timeline Instances, animation, GameObjects, and scripts that illustrate how to use Unity's Timeline. For more information, see [ Unity's Timeline](https://docs.unity3d.com/Manual/TimelineSection.html) in the [Unity Manual](https://docs.unity3d.com). For licensing and usage, see Package Licensing.*
 >>>
 
-# Installing &lt;package name&gt;
+# Installing ugs-cli-mcp-core
 >>>
 Begin this section with a cross-reference to the official Unity Manual topic on how to install packages. If the package requires special installation instructions, include these steps in this section.
 >>>
@@ -67,7 +67,7 @@ In addition, you need to install the following resources:
 
 
 <a name="UsingPackageName"></a>
-# Using &lt;package name&gt;
+# Using ugs-cli-mcp-core
 >>>
 The contents of this section depends on the type of package.
 
@@ -101,7 +101,7 @@ For more on the Unity documentation standards for creating and adding screen gra
 This subtopic includes a bullet list with the compatible versions of Unity. This subtopic may also include additional requirements or recommendations for 3rd party software or hardware. An example includes a dependency on other packages. If you need to include references to non-Unity products, make sure you refer to these products correctly and that all references include the proper trademarks (tm or r)
 >>>
 
-This version of &lt;package name&gt; is compatible with the following versions of the Unity Editor:
+This version of ugs-cli-mcp-core is compatible with the following versions of the Unity Editor:
 
 * 2018.1 and later (recommended)
 
@@ -116,7 +116,7 @@ To use this package, you must have the following 3rd party products:
 This section lists the known limitations with this version of the package. If there are no known limitations, or if the limitations are trivial, exclude this section. An example is provided.
 >>>
 
-&lt;package name&gt; version &lt;package version&gt; includes the following known limitations:
+ugs-cli-mcp-core version &lt;package version&gt; includes the following known limitations:
 
 * &lt;brief one-line description of first limitation.&gt;
 * &lt;brief one-line description of second limitation.&gt;
