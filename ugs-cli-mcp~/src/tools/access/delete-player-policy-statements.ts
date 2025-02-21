@@ -1,5 +1,6 @@
 import { exec } from "child_process";
 import { promisify } from "util";
+import fs from "fs";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
@@ -11,19 +12,49 @@ export function registerDeletePlayerPolicyStatements(server: McpServer) {
         "Delete player policy statements",
         {
             "playerId": z.string().describe("The ID of the player whose policy statements to delete"),
-            "statements": z.array(z.string()).describe("The IDs of the statements to delete")
+            "filePath": z.string().describe("The path of the JSON file containing delete options schema"),
+
+            //Optional
+            "projectId": z.string().optional().describe("The Unity cloud project ID."),
+            "environment": z.string().optional().describe("The services environment name."),
+            "help": z.boolean().optional().describe("Display help and usage information."),
+            "quiet": z.boolean().optional().describe("Reduce logging to a minimum."),
+            "json": z.boolean().optional().describe("Use JSON as the output format.")
         },
-        async ({ playerId, statements }) => {
+
+        async ({ playerId, filePath, projectId, environment, help, quiet, json }) => {
+            let result = { 
+                content: [{ 
+                    type: "text" as const,
+                    text: "" 
+                }]
+            };
             try {
-                const command = `ugs access delete-player-policy-statements ${playerId} ${statements.join(' ')}`;
+                const commandParts = ['ugs', 'access', 'delete-player-policy-statements', playerId, filePath];
+                
+                if (projectId) {
+                    commandParts.push('--project-id', projectId);
+                }
+                if (environment) {
+                    commandParts.push('--environment-name', environment);
+                }
+                if (help) {
+                    commandParts.push('--help');
+                }
+                if (quiet) {
+                    commandParts.push('--quiet');
+                }
+                if (json) {
+                    commandParts.push('--json');
+                }
+
+                const command = commandParts.join(' ');
                 const { stdout, stderr } = await execAsync(command);
-                return {
-                    content: [{ type: "text", text: stdout.trim() || `Error: ${stderr}` }]
-                };
+                result.content[0].text = stdout.trim() || `Error: ${stderr}`;
             } catch (error: any) {
-                return {
-                    content: [{ type: "text", text: `Error: ${error?.message || String(error)}` }]
-                };
+                result.content[0].text = `Error: ${error?.message || String(error)}`;
+            } finally {
+                return result;
             }
         }
     );

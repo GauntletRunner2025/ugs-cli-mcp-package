@@ -2,16 +2,12 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import { z } from "zod";
 const execAsync = promisify(exec);
-export function registerLogin(server) {
-    server.tool("login", "Log in to Unity Gaming Services", {
-        "token": z.string().optional().describe("API token to use for authentication")
-    }, async ({ token }) => {
+export function registerDeleteModule(server) {
+    server.tool("delete-module", "Delete a Cloud-Code module", {
+        "moduleName": z.string().describe("Name of the target module to delete")
+    }, async ({ moduleName }) => {
         try {
-            let command = `ugs login`;
-            if (token) {
-                command += ` --token ${token}`;
-            }
-            const { stdout, stderr } = await execAsync(command);
+            const { stdout, stderr } = await execAsync(`ugs cloud-code modules delete ${moduleName}`);
             return {
                 content: [{ type: "text", text: stdout.trim() || `Error: ${stderr}` }]
             };

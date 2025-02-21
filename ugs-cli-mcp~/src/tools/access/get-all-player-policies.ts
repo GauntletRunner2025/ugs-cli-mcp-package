@@ -9,12 +9,9 @@ export function registerGetAllPlayerPolicies(server: McpServer) {
     server.tool(
         "get-all-player-policies",
         "Get all player policies",
-        {
-            "playerId": z.string().describe("The ID of the player whose policies to get")
-        },
-        async ({ playerId }) => {
+        async ({ }) => {
             try {
-                const command = `ugs access get-all-player-policies ${playerId}`;
+                const command = `ugs access get-all-player-policies`;
                 const { stdout, stderr } = await execAsync(command);
                 return {
                     content: [{ type: "text", text: stdout.trim() || `Error: ${stderr}` }]

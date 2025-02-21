@@ -2,14 +2,15 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import { z } from "zod";
 const execAsync = promisify(exec);
-export function registerLogin(server) {
-    server.tool("login", "Log in to Unity Gaming Services", {
-        "token": z.string().optional().describe("API token to use for authentication")
-    }, async ({ token }) => {
+export function registerPublish(server) {
+    server.tool("publish-economy", "Publish Economy configuration", {
+        "filePath": z.string().describe("Path to the configuration file to publish"),
+        "dryRun": z.boolean().optional().describe("Validate the configuration without publishing")
+    }, async ({ filePath, dryRun }) => {
         try {
-            let command = `ugs login`;
-            if (token) {
-                command += ` --token ${token}`;
+            let command = `ugs economy publish ${filePath}`;
+            if (dryRun) {
+                command += ` --dry-run`;
             }
             const { stdout, stderr } = await execAsync(command);
             return {

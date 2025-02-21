@@ -2,14 +2,16 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import { z } from "zod";
 const execAsync = promisify(exec);
-export function registerLogin(server) {
-    server.tool("login", "Log in to Unity Gaming Services", {
-        "token": z.string().optional().describe("API token to use for authentication")
-    }, async ({ token }) => {
+export function registerCreateCoreDump(server) {
+    server.tool("create-core-dump", "Create a new core dump", {
+        "serverId": z.string().describe("ID of the server"),
+        "filePath": z.string().describe("Path to the core dump file"),
+        "notes": z.string().optional().describe("Notes about the core dump")
+    }, async ({ serverId, filePath, notes }) => {
         try {
-            let command = `ugs login`;
-            if (token) {
-                command += ` --token ${token}`;
+            let command = `ugs gsh core-dump create ${serverId} ${filePath}`;
+            if (notes) {
+                command += ` --notes "${notes}"`;
             }
             const { stdout, stderr } = await execAsync(command);
             return {

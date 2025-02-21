@@ -2,14 +2,14 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import { z } from "zod";
 const execAsync = promisify(exec);
-export function registerLogin(server) {
-    server.tool("login", "Log in to Unity Gaming Services", {
-        "token": z.string().optional().describe("API token to use for authentication")
-    }, async ({ token }) => {
+export function registerGetPublished(server) {
+    server.tool("get-published", "Get published Economy configuration", {
+        "output": z.string().optional().describe("Path to save the configuration file")
+    }, async ({ output }) => {
         try {
-            let command = `ugs login`;
-            if (token) {
-                command += ` --token ${token}`;
+            let command = `ugs economy get-published`;
+            if (output) {
+                command += ` --output ${output}`;
             }
             const { stdout, stderr } = await execAsync(command);
             return {
