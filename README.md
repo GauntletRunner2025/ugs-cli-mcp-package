@@ -6,7 +6,10 @@ Step 1
 In Unity, open up the Package Manager, click the Add Package drop down and click "Install package from git url" and paste in: 
 https://github.com/GauntletRunner2025/ugs-cli-mcp-core-package.git
 
-If the package imports successfully, a welcome window should pop up and give further instructions. Otherwise, try the dropdown under Tools.
-
 Step 2
-The MCP server must be added to the list of servers your local windsurf instance knows about. It can be added automatically, unless you already have an mcp configuration, in which case you'll have to add it manually.
+If the package imports successfully, use the dropdown under Tools to 'Configure MCP server'. If you have no MCP config file, this package will create one. If one already exists, it'll attempt to add to it. 
+
+Step 3
+In the MCP server window in Windsurf (the hammer icon) click Refresh and verify that the ugs-cli-mcp server is found, and providing some number of tools. 
+
+This supports a small number of tools/ugs commands to start, with more being added as they are tested in.
