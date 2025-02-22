@@ -13,3 +13,16 @@ Step 3
 In the MCP server window in Windsurf (the hammer icon) click Refresh and verify that the ugs-cli-mcp server is found, and providing some number of tools. 
 
 This supports a small number of tools/ugs commands to start, with more being added as they are tested in.
+Supports:
+
+Player accounts
+  create-player
+  delete-player
+  disable-player
+  enable-player
+  get-player
+  list-player
+  
+Cloud Save
+  list-custom-data-ids
+  create-custom-index
