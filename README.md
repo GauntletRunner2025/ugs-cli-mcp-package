@@ -12,9 +12,19 @@ https://github.com/GauntletRunner2025/ugs-cli-mcp-core-package.git
 ### Step 2
 If the package imports successfully, use the dropdown under **Tools** to **"Configure MCP server"**.  
 - If you have no MCP config file, this package will create one.  
-- If one already exists, it will attempt to add to it.  
+- If one already exists, it will attempt to add to it.
+- We make a backup of the existing mcp config, before altering it. You can revert to this backup at any time using the menu.
 
 ### Step 3
+UGS CLI must be logged into, using a Service Role key and secret. These can be found on dashboard.unity.com. 
+- Logging in through the menu will open a command window and guide you through the login.
+
+### Step 4
+Connecting the project id
+- The project id and environment name must be set, so UGS commands know which project to modify.
+- CLicking the menu item will automatically set the project id and environment name.
+  
+### Step 5
 In the **MCP server window** in Windsurf (the hammer icon), click **Refresh** and verify that the `ugs-cli-mcp` server is found and providing some number of tools.
 
 ---
