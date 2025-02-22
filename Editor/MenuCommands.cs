@@ -8,6 +8,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
     public static class MenuCommands
     {
         private const string WelcomeMessageShownKey = "UgsCliMcp_WelcomeMessageShown";
+        private const string LoginInstructions = @"echo Welcome to UGS CLI MCP Login! && echo. && " + 
+            @"echo Please follow these steps: && " +
+            @"echo 1. Go to https://cloud.unity.com && " +
+            @"echo 2. Generate an API token with appropriate permissions && " +
+            @"echo 3. Copy your token and paste it when prompted && echo. && " +
+            @"ugs login";
 
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -25,7 +31,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
             var startInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
-                Arguments = "/K ugs login",
+                Arguments = $"/K {LoginInstructions}",
                 UseShellExecute = true,
                 CreateNoWindow = false
             };
