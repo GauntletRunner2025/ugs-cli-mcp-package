@@ -16,13 +16,13 @@ This supports a small number of tools/ugs commands to start, with more being add
 Supports:
 
 Player accounts
-  create-player
-  delete-player
-  disable-player
-  enable-player
-  get-player
-  list-player
+  -create-player
+  -delete-player
+  -disable-player
+  -enable-player
+  -get-player
+  -list-player
   
 Cloud Save
-  list-custom-data-ids
-  create-custom-index
+  -list-custom-data-ids
+  -create-custom-index
