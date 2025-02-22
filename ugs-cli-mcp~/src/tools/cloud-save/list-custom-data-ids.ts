@@ -6,23 +6,17 @@ import { validateProjectId } from "../../utils/project-validation.js";
 
 const execAsync = promisify(exec);
 
+// Store the last error response
+let lastError: any = null;
+
 export function registerListCustomDataIDs(server: McpServer) {
 
 server.tool(
-    "help-list-custom-data-ids",
-    "List and explain options for the list-custom-data-ids tool",
+    "get-error-details",
+    "Get the detailed error response from the last failed command",
     async () => {
-        const helpItems = [
-            "environment-name	The services environment name.",
-            "limit	The maximum number of custom data IDs to return. If not specified, the default limit of 20 will be used.",
-            "start The custom data ID to start the page from. If not specified, the first page will be returned.",
-            "help	Display help and usage information.",
-            "quiet	Reduce logging to a minimum.",
-            "json	Use JSON as the output format."
-        ];
-        
         return {
-            content: [{ type: "text", text: helpItems.join("\n") }]
+            content: [{ type: "text", text: lastError ? JSON.stringify(lastError, null, 2) : "No error stored" }]
         };
     }
 );
@@ -36,9 +30,14 @@ server.tool(
     async ({ 
         "limit":limit,
      }) => {
+        // Clear previous error
+        lastError = null;
+        
         try {
             const validation = await validateProjectId();
             if (!validation.isValid) {
+                lastError = validation.error;
+                console.error("[Error]:", validation.error);
                 return {
                     content: [{ type: "text", text: `[Error]: ${validation.error}` }]
                 };
@@ -50,11 +49,19 @@ server.tool(
                 ugsCommand.push('--limit', limit);
             }
 
-            const { stdout } = await execAsync(ugsCommand.join(' '));
+            const { stdout, stderr } = await execAsync(ugsCommand.join(' '));
+            if (stderr) {
+                console.error("[stderr]:", stderr);
+            }
             return {
                 content: [{ type: "text", text: stdout.trim() }]
             };
         } catch (error: any) {
+            lastError = error;
+            console.error("[Error]:", error?.message || String(error));
+            if (error?.stderr) {
+                console.error("[stderr]:", error.stderr);
+            }
             return {
                 content: [{ type: "text", text: `[Error]: ${error?.message || String(error)}` }]
             };

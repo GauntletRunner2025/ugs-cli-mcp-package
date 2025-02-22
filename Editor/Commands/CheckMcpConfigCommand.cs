@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace Gauntletrunner2025.UgsCliMcp.Editor.Commands
 {
-    public static class CheckMcpConfigCommand
+    public static class AddServerToMcpConfigCommand
     {
-        [MenuItem("Tools/UGS CLI MCP/Check MCP Config")]
+        [MenuItem("Tools/UGS CLI MCP/Add server to MCP Config")]
         private static void Execute()
         {
             string userFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
@@ -30,9 +30,9 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Commands
                         if (hasUgsCliMcp)
                         {
                             var serverConfig = config.McpServers.First(kvp => McpConfigUtility.IsUgsCliMcpServer(kvp.Key)).Value;
-                            Debug.Log($"UGS CLI MCP server is installed and configured:");
-                            Debug.Log($"  Command: {serverConfig.Command}");
-                            Debug.Log($"  Args: {string.Join(", ", serverConfig.Args)}");
+                            Debug.Log($"UGS CLI MCP server is installed and configured");
+                            // Debug.Log($"  Command: {serverConfig.Command}");
+                            // Debug.Log($"  Args: {string.Join(", ", serverConfig.Args)}");
                         }
                         else
                         {

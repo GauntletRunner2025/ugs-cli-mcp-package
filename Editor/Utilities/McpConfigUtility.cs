@@ -10,8 +10,8 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
     public static class McpConfigUtility
     {
         private const string UgsCliMcpServerKey = "ugs-cli-mcp";
-        private const string GlobalConfigFileName = "mcp_config.json";
-        private static string ConfigSubPath = System.IO.Path.Combine(".codeium", "windsurf-next");
+        public const string GlobalConfigFileName = "mcp_config.json";
+        public static string ConfigSubPath = System.IO.Path.Combine(".codeium", "windsurf-next");
 
         [MenuItem("Tools/UGS CLI MCP/Open Global Config")]
         public static void OpenGlobalConfig()
@@ -81,6 +81,9 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 };
 
                 config.McpServers[UgsCliMcpServerKey] = serverConfig;
+
+                // Create a backup of the existing config file
+                McpConfigBackupUtility.CreateBackup(configPath);
 
                 string jsonContent = JsonConvert.SerializeObject(config, Formatting.Indented);
                 File.WriteAllText(configPath, jsonContent);
