@@ -8,11 +8,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
     public static class MenuCommands
     {
         private const string WelcomeMessageShownKey = "UgsCliMcp_WelcomeMessageShown";
-        private const string LoginInstructions = @"echo Welcome to UGS CLI MCP Login! && echo. && " + 
-            @"echo Please follow these steps: && " +
-            @"echo 1. Go to https://cloud.unity.com && " +
-            @"echo 2. Generate an API token with appropriate permissions && " +
-            @"echo 3. Copy your token and paste it when prompted && echo. && " +
+        private const string EnvironmentNameKey = "UgsCliMcp_EnvironmentName";
+        private const string ServiceRoleInstructionsLink = @"https://docs.unity.com/ugs/en-us/manual/game-server-hosting/manual/concepts/authentication-service-accounts";
+        private const string LoginInstructions = @"echo Welcome to UGS CLI MCP Login! && echo. && " +
+            @"echo Go to " + ServiceRoleInstructionsLink + " && " +
+            @"echo Follow their instructions to create a service role account and key. && " +
+            @"echo You will need the key id and secret to use with the ugs-cli tool. && " +
             @"ugs login";
 
         [InitializeOnLoadMethod]
@@ -46,6 +47,32 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
             }
         }
 
+        [MenuItem("Tools/UGS CLI MCP/Configure Project")]
+        private static void ConfigureProject()
+        {
+            string projectId = CloudProjectSettings.projectId;
+            if (string.IsNullOrEmpty(projectId))
+            {
+                EditorUtility.DisplayDialog("Configure Project", 
+                    "No project ID found. Please make sure you have linked this project to Unity Cloud Services.", 
+                    "OK");
+                return;
+            }
+
+            string currentEnv = EditorPrefs.GetString(EnvironmentNameKey, "production");
+            string environment = EditorInputDialog.Show("Configure Project", 
+                "Enter the environment name:", 
+                currentEnv);
+
+            if (!string.IsNullOrEmpty(environment))
+            {
+                EditorPrefs.SetString(EnvironmentNameKey, environment);
+                UnityEngine.Debug.Log($"Project configuration set:\nProject ID: {projectId}\nEnvironment: {environment}");
+            }
+        }
+
         internal static string WelcomeMessageKey => WelcomeMessageShownKey;
+        internal static string GetEnvironmentName() => EditorPrefs.GetString(EnvironmentNameKey, "production");
+        internal static string GetProjectId() => CloudProjectSettings.projectId;
     }
 }
