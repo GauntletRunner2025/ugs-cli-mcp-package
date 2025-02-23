@@ -23,6 +23,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         }
 
         [MenuItem("Window/UGS CLI MCP/Installation Guide")]
+        [MenuItem("Tools/UGS CLI MCP/Installation")]
         public static void ShowWindow()
         {
             var window = EditorWindow.GetWindow<InstallationGuideWindow>(

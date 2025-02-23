@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using System.IO;
-using Gauntletrunner2025.UgsCliMcp.Editor.Settings;
 
 namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 {
@@ -10,10 +9,11 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
     {
         private const string PackageName = "com.gauntletrunner2025.ugs-cli-mcp-core";
         private const string AssetsPath = "Assets/com.gauntletrunner2025.ugs-cli-mcp";
+        private const string DeveloperModeKey = "MCPDeveloperMode";
 
         public static string GetPackagePath()
         {
-            if (UgsCliMcpSettings.IsDeveloperMode())
+            if (EditorPrefs.GetBool(DeveloperModeKey, false))
             {
                 // In developer mode, use the Assets folder path
                 string projectPath = Path.GetDirectoryName(Application.dataPath);
