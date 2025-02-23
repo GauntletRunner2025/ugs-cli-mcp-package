@@ -63,6 +63,12 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             checkLoginButton.clicked += CheckLoginStatus;
             loginButton.clicked += LoginToUgs;
 
+            // Setup project ID UI
+            SetupProjectIdUI();
+
+            // Setup MCP config UI
+            SetupMcpConfigUI();
+
             // Show first step
             stepManager.NavigateStep(0);
         }

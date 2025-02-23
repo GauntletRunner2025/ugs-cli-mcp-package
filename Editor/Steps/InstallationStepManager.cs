@@ -1,12 +1,13 @@
 using UnityEngine.UIElements;
 using System;
+using UnityEngine;
 
 namespace GauntletRunner2025.UgsCliMcp.Editor
 {
     public class InstallationStepManager
     {
         private readonly VisualElement rootElement;
-        private readonly string[] steps = { "step-1", "step-2", "step-3" };
+        private readonly string[] steps = { "step-1", "step-2", "step-3", "step-4", "step-5", "step-6" };
         private readonly bool[] stepCompleted;
         private int currentStep = 0;
 
@@ -29,7 +30,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
 
             currentStep += direction;
-            
+
             // Handle bounds
             if (currentStep <= 0)
             {
@@ -40,8 +41,17 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                 currentStep = steps.Length - 1;
             }
 
+            // Reset completion state for the new step
+            stepCompleted[currentStep] = false;
+
             // Show current step
             rootElement.Q<VisualElement>(steps[currentStep]).style.display = DisplayStyle.Flex;
+
+            // Auto-complete final step since it's just instructions
+            if (currentStep == steps.Length - 1)
+            {
+                stepCompleted[currentStep] = true;
+            }
 
             UpdateNavigationState();
         }
@@ -61,8 +71,13 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
 
         private void UpdateNavigationState()
         {
-            OnCanNavigatePreviousChanged?.Invoke(currentStep > 0);
-            OnCanNavigateNextChanged?.Invoke(currentStep < steps.Length - 1 && stepCompleted[currentStep]);
+            var canNavigatePrevious = currentStep > 0;
+            var canNavigateNext = currentStep < steps.Length - 1 && stepCompleted[currentStep];
+
+            Debug.Log($"Step {currentStep} navigation state - Previous: {canNavigatePrevious}, Next: {canNavigateNext}, Completed: {stepCompleted[currentStep]}");
+
+            OnCanNavigatePreviousChanged?.Invoke(canNavigatePrevious);
+            OnCanNavigateNextChanged?.Invoke(canNavigateNext);
         }
 
         public int CurrentStepIndex => currentStep;

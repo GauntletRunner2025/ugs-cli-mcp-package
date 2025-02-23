@@ -39,7 +39,40 @@
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="step-3" style="flex-grow: 1; display: none;">
-                <engine:Label text="Label" />
+                <engine:Label text="Step 3: Set Project ID" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="Let's set up your project ID." style="margin-bottom: 20px; white-space: normal;" />
+                <engine:VisualElement style="margin-bottom: 20px; flex-direction: column;">
+                    <engine:Button text="Set Project ID" name="set-project-id-button" />
+                    <engine:Label name="project-id-result" style="margin-top: 10px;" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+            <engine:VisualElement name="step-4" style="flex-grow: 1; display: none;">
+                <engine:Label text="Step 4: Set Environment" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="Now let's set up your environment." style="margin-bottom: 20px; white-space: normal;" />
+                <engine:VisualElement style="margin-bottom: 20px; flex-direction: column;">
+                    <engine:DropdownField name="environment-name-dropdown" />
+                    <engine:Button text="Set Environment" name="set-environment-button" style="margin-top: 10px;" />
+                    <engine:Label name="environment-result" style="margin-top: 10px;" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+            <engine:VisualElement name="step-5" style="flex-grow: 1; display: none;">
+                <engine:Label text="Step 5: Configure MCP Server" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="Let's check if the MCP server is already configured in your Windsurf settings." style="margin-bottom: 20px; white-space: normal;" />
+                <engine:VisualElement style="margin-bottom: 20px; flex-direction: column;">
+                    <engine:Button text="Check MCP Configuration" name="check-mcp-config-button" />
+                    <engine:Label name="mcp-config-result" style="margin-top: 10px;" />
+                    <engine:Button text="Add MCP Server" name="add-mcp-server-button" style="margin-top: 10px; display: none;" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+            <engine:VisualElement name="step-6" style="flex-grow: 1; display: none;">
+                <engine:Label text="Step 6: Verify in Windsurf" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="Great! Now let's verify everything is working in Windsurf:" style="margin-bottom: 20px; white-space: normal;" />
+                <engine:Label text="1. Open Windsurf" style="margin-bottom: 10px; white-space: normal; -unity-font-style: bold;" />
+                <engine:Label text="2. Go to the MCP panel" style="margin-bottom: 10px; white-space: normal; -unity-font-style: bold;" />
+                <engine:Label text="3. Click the Refresh button in the top-right" style="margin-bottom: 20px; white-space: normal; -unity-font-style: bold;" />
+                <engine:Label text="To test it's working, try asking Cascade:" style="margin-bottom: 10px; white-space: normal;" />
+                <engine:Label text="'What version of UGS CLI is installed?'" style="margin-bottom: 20px; white-space: normal; -unity-font-style: italic;" />
+                <engine:Label text="The agent should respond with the version number we verified in Step 1." style="margin-bottom: 10px; white-space: normal;" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement class="button-container" style="flex-direction: row; align-items: center; justify-content: space-between;">
