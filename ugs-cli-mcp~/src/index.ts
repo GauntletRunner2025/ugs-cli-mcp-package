@@ -24,48 +24,48 @@ import { registerLogout } from "./tools/logout.js";
 import { registerStatus } from "./tools/status.js";
 
 //cloud-code
-import{registerDeleteModule} from "./tools/cloud-code/modules/delete-module.js";
-import{registerDeployModule} from "./tools/cloud-code/modules/deploy-module.js";
+import { registerDeleteModule } from "./tools/cloud-code/modules/delete-module.js";
+import { registerDeployModule } from "./tools/cloud-code/modules/deploy-module.js";
 import { registerExportModule } from "./tools/cloud-code/modules/export-module.js";
 import { registerGetModule } from "./tools/cloud-code/modules/get-module.js";
-import {registerImportModule} from "./tools/cloud-code/modules/import-module.js";
-import {registerListModules} from "./tools/cloud-code/modules/list-modules.js";
-import {registerNewModuleFile} from "./tools/cloud-code/modules/new-module-file.js";
+import { registerImportModule } from "./tools/cloud-code/modules/import-module.js";
+import { registerListModules } from "./tools/cloud-code/modules/list-modules.js";
+import { registerNewModuleFile } from "./tools/cloud-code/modules/new-module-file.js";
 
-import{registerCreateScript} from "./tools/cloud-code/scripts/create-script.js";
-import{registerDeleteScript} from "./tools/cloud-code/scripts/delete-script.js";
-import{registerExportScript} from "./tools/cloud-code/scripts/export-script.js";
-import {registerGetScript} from "./tools/cloud-code/scripts/get-script.js";
-import {registerImportScript} from "./tools/cloud-code/scripts/import-script.js";
-import{registerNewScriptFile} from "./tools/cloud-code/scripts/new-script-file.js";
-import {registerPublishScript} from "./tools/cloud-code/scripts/publish-script.js";
+import { registerCreateScript } from "./tools/cloud-code/scripts/create-script.js";
+import { registerDeleteScript } from "./tools/cloud-code/scripts/delete-script.js";
+import { registerExportScript } from "./tools/cloud-code/scripts/export-script.js";
+import { registerGetScript } from "./tools/cloud-code/scripts/get-script.js";
+import { registerImportScript } from "./tools/cloud-code/scripts/import-script.js";
+import { registerNewScriptFile } from "./tools/cloud-code/scripts/new-script-file.js";
+import { registerPublishScript } from "./tools/cloud-code/scripts/publish-script.js";
 import { registerUpdateScript } from "./tools/cloud-code/scripts/update-script.js";
 import { registerListScripts } from "./tools/cloud-code/scripts/list-scripts.js";
 
 //Cloud-content-delivery
-import {registerUpdateBucketPermissions} from "./tools/cloud-content-delivery/buckets/permissions/update-bucket-permissions.js";
-import {registerCreateBadge} from "./tools/cloud-content-delivery/badges/create-badge.js";
-import {registerDeleteBadge} from "./tools/cloud-content-delivery/badges/delete-badge.js";
-import {registerListBadges} from "./tools/cloud-content-delivery/badges/list-badges.js";
-import {registerCreateBucket} from "./tools/cloud-content-delivery/buckets/create-bucket.js";
-import {registerDeleteBucket} from "./tools/cloud-content-delivery/buckets/delete-bucket.js";
-import {registerGetBucketInfo} from "./tools/cloud-content-delivery/buckets/get-bucket-info.js";
-import {registerListBuckets} from "./tools/cloud-content-delivery/buckets/list-buckets.js";
+import { registerUpdateBucketPermissions } from "./tools/cloud-content-delivery/buckets/permissions/update-bucket-permissions.js";
+import { registerCreateBadge } from "./tools/cloud-content-delivery/badges/create-badge.js";
+import { registerDeleteBadge } from "./tools/cloud-content-delivery/badges/delete-badge.js";
+import { registerListBadges } from "./tools/cloud-content-delivery/badges/list-badges.js";
+import { registerCreateBucket } from "./tools/cloud-content-delivery/buckets/create-bucket.js";
+import { registerDeleteBucket } from "./tools/cloud-content-delivery/buckets/delete-bucket.js";
+import { registerGetBucketInfo } from "./tools/cloud-content-delivery/buckets/get-bucket-info.js";
+import { registerListBuckets } from "./tools/cloud-content-delivery/buckets/list-buckets.js";
 
-import {registerCopyEntry} from "./tools/cloud-content-delivery/entries/copy-entry.js";
-import {registerDeleteEntry} from "./tools/cloud-content-delivery/entries/delete-entry.js";
-import {registerDownloadEntry} from "./tools/cloud-content-delivery/entries/download-entry.js";
-import {registerGetEntryInfo} from "./tools/cloud-content-delivery/entries/get-entry-info.js";
-import {registerListEntries} from "./tools/cloud-content-delivery/entries/list-entries.js";
-import {registerSyncEntries} from "./tools/cloud-content-delivery/entries/sync-entries.js";
-import {registerUpdateEntry} from "./tools/cloud-content-delivery/entries/update-entry.js";
+import { registerCopyEntry } from "./tools/cloud-content-delivery/entries/copy-entry.js";
+import { registerDeleteEntry } from "./tools/cloud-content-delivery/entries/delete-entry.js";
+import { registerDownloadEntry } from "./tools/cloud-content-delivery/entries/download-entry.js";
+import { registerGetEntryInfo } from "./tools/cloud-content-delivery/entries/get-entry-info.js";
+import { registerListEntries } from "./tools/cloud-content-delivery/entries/list-entries.js";
+import { registerSyncEntries } from "./tools/cloud-content-delivery/entries/sync-entries.js";
+import { registerUpdateEntry } from "./tools/cloud-content-delivery/entries/update-entry.js";
 
-import {registerGetPromotionStatus} from "./tools/cloud-content-delivery/releases/promotions/get-promotion-status.js";
-import {registerCreateRelease} from "./tools/cloud-content-delivery/releases/create-release.js";
-import {registerGetReleaseInfo} from "./tools/cloud-content-delivery/releases/get-release-info.js";
-import {registerListReleases} from "./tools/cloud-content-delivery/releases/list-releases.js";
-import {registerPromoteRelease} from "./tools/cloud-content-delivery/releases/promote-release.js";
-import {registerUpdateRelease} from "./tools/cloud-content-delivery/releases/update-release.js";
+import { registerGetPromotionStatus } from "./tools/cloud-content-delivery/releases/promotions/get-promotion-status.js";
+import { registerCreateRelease } from "./tools/cloud-content-delivery/releases/create-release.js";
+import { registerGetReleaseInfo } from "./tools/cloud-content-delivery/releases/get-release-info.js";
+import { registerListReleases } from "./tools/cloud-content-delivery/releases/list-releases.js";
+import { registerPromoteRelease } from "./tools/cloud-content-delivery/releases/promote-release.js";
+import { registerUpdateRelease } from "./tools/cloud-content-delivery/releases/update-release.js";
 
 //Cloud Save
 import { registerListCustomDataIDs } from "./tools/cloud-save/list-custom-data-ids.js";
@@ -79,8 +79,8 @@ import { registerSetConfig } from "./tools/configuration/set-config.js";
 //Economy
 import { registerGetPublished } from "./tools/economy/get-published.js";
 import { registerGetResources } from "./tools/economy/get-resources.js";
-import{registerNewFile} from "./tools/economy/new-file.js";
-import{registerPublish} from "./tools/economy/publish.js";
+import { registerNewFile } from "./tools/economy/new-file.js";
+import { registerPublish } from "./tools/economy/publish.js";
 
 //Environment
 import { registerAddEnvironment } from "./tools/environment/add-environment.js";
@@ -95,13 +95,13 @@ import { registerGetBuildConfiguration } from "./tools/game-server-hosting/build
 import { registerListBuildConfigurations } from "./tools/game-server-hosting/build-configurations/list-build-configurations.js";
 import { registerUpdateBuildConfiguration } from "./tools/game-server-hosting/build-configurations/update-build-configuration.js";
 
-import{registerCreateBuildVersion} from "./tools/game-server-hosting/builds/create-build-version.js";
-import{registerCreateBuild} from "./tools/game-server-hosting/builds/create-build.js";
-import{registerDeleteBuild} from "./tools/game-server-hosting/builds/delete-build.js";
-import{registerGetBuild} from "./tools/game-server-hosting/builds/get-build.js";
+import { registerCreateBuildVersion } from "./tools/game-server-hosting/builds/create-build-version.js";
+import { registerCreateBuild } from "./tools/game-server-hosting/builds/create-build.js";
+import { registerDeleteBuild } from "./tools/game-server-hosting/builds/delete-build.js";
+import { registerGetBuild } from "./tools/game-server-hosting/builds/get-build.js";
 // import{registerListBuildInternals} from "./tools/game-server-hosting/builds/list-build-internals.js";
-import{registerListBuilds} from "./tools/game-server-hosting/builds/list-builds.js";
-import{registerUpdateBuild} from "./tools/game-server-hosting/builds/update-build.js";
+import { registerListBuilds } from "./tools/game-server-hosting/builds/list-builds.js";
+import { registerUpdateBuild } from "./tools/game-server-hosting/builds/update-build.js";
 
 
 async function main() {
@@ -112,18 +112,29 @@ async function main() {
 
   // Register all tools
   registerGetVersionHandler(server);
-  registerListCustomDataIDs(server);
-  registerCreateCustomIndex(server);
-  registerCreatePlayer(server);
-  registerDeletePlayer(server);
-  registerDisablePlayer(server);
-  registerEnablePlayer(server);
-  registerGetPlayer(server);
-  registerListPlayer(server);
-  registerFetch(server);
-  registerLogin(server);
-  registerLogout(server);
-  registerStatus(server);
+
+  // //Cloud save
+  // registerListCustomDataIDs(server);
+  // registerCreateCustomIndex(server);
+
+  // //Player management
+  // registerCreatePlayer(server);
+  // registerDeletePlayer(server);
+  // registerDisablePlayer(server);
+  // registerEnablePlayer(server);
+  // registerGetPlayer(server);
+  // registerListPlayer(server);
+
+  // //???
+  // registerFetch(server);
+  // registerLogin(server);
+  // registerLogout(server);
+  // registerStatus(server);
+
+  //Config
+  registerDeleteConfig(server);
+  registerGetConfig(server);
+  registerSetConfig(server);
 
   //Access- Not supported
   // registerDeletePlayerPolicyStatements(server);

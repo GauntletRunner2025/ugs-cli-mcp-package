@@ -33,6 +33,11 @@ In the **MCP server window** in Windsurf (the hammer icon), click **Refresh** an
 
 This package starts with a small number of **UGS commands**, with more being added as they are tested.
 
+### **Configuration**
+- `get-config`
+- `set-config`
+- `delete-config`
+
 ### **Player Accounts**
 - `create-player`
 - `delete-player`
