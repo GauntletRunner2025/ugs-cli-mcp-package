@@ -13,8 +13,10 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 
         public static string GetPackagePath()
         {
-            if (EditorPrefs.GetBool(DeveloperModeKey, false))
+            var isDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
+            if (isDeveloperMode)
             {
+                Debug.Log("[Debug] MCPDeveloperMode is true");
                 // In developer mode, use the Assets folder path
                 string projectPath = Path.GetDirectoryName(Application.dataPath);
                 string fullAssetsPath = Path.GetFullPath(Path.Combine(projectPath, AssetsPath));

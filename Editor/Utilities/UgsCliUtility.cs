@@ -180,7 +180,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                         else if (args.Data.Contains("added") || args.Data.Contains("changed"))
                         {
                             wasSuccessful = true;
-                            onProgressUpdate("Package installed successfully!");
+                            onProgressUpdate("Package installed successfully! Now try getting the UGS CLI version, to continue.");
                         }
                         else
                         {

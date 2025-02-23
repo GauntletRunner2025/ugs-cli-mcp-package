@@ -1,6 +1,7 @@
 using UnityEngine.UIElements;
 using System;
 using UnityEngine;
+using UnityEditor;
 
 namespace GauntletRunner2025.UgsCliMcp.Editor
 {
@@ -76,7 +77,10 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             var canNavigatePrevious = currentStep > 0;
             var canNavigateNext = currentStep == steps.Length - 1 || stepCompleted[currentStep];  // Always enable on last step
 
-            Debug.Log($"Step {currentStep} navigation state - Previous: {canNavigatePrevious}, Next: {canNavigateNext}, Completed: {stepCompleted[currentStep]}");
+            //Only print this if we're in debug mode
+            //EditorPrefs Get Bool MCPDeveloperMode
+            if (EditorPrefs.GetBool("MCPDeveloperMode", false))
+                Debug.Log($"Step {currentStep} navigation state - Previous: {canNavigatePrevious}, Next: {canNavigateNext}, Completed: {stepCompleted[currentStep]}");
 
             OnCanNavigatePreviousChanged?.Invoke(canNavigatePrevious);
             OnCanNavigateNextChanged?.Invoke(canNavigateNext);

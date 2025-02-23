@@ -40,6 +40,10 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             checkNpmButton = rootVisualElement.Q<Button>("check-npm-button");
             installUgsButton = rootVisualElement.Q<Button>("install-ugs-button");
             simulateNotInstalledButton = rootVisualElement.Q<Button>("debug-simulate-button");
+            // Hide debug button by default, show only if MCPDeveloperMode is enabled
+            simulateNotInstalledButton.style.display = EditorPrefs.GetBool("MCPDeveloperMode", false) 
+                ? DisplayStyle.Flex 
+                : DisplayStyle.None;
             checkLoginButton = rootVisualElement.Q<Button>("check-login-button");
             loginButton = rootVisualElement.Q<Button>("login-button");
             doneButton = rootVisualElement.Q<Button>("done-button");
@@ -87,7 +91,9 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
 
         private void OnDoneButtonClicked()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
+            //Close the Editor Window
+            Close();
         }
 
         private void LoginToUgs()
