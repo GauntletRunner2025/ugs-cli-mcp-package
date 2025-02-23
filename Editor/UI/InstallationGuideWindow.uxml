@@ -1,0 +1,50 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/ugs-cli-mcp-package/Editor/UI/InstallationGuideWindow.uss?fileID=7433441132597879392&amp;guid=e61eb1432c42c6842b0eae7d11c954ca&amp;type=3#InstallationGuideWindow" />
+    <engine:VisualElement name="container" class="container" style="background-color: rgb(78, 88, 96); flex-grow: 1;">
+        <engine:VisualElement name="steps-container" class="steps-container">
+            <engine:VisualElement name="step-1" style="flex-grow: 1;">
+                <engine:Label text="Step 1: Check UGS CLI Installation" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="First, let&apos;s verify that the UGS CLI tool is installed correctly." style="margin-bottom: 20px; white-space: normal;" />
+                <engine:VisualElement style="margin-bottom: 20px; flex-direction: column;">
+                    <engine:VisualElement style="flex-direction: column;">
+                        <engine:Button text="Check UGS CLI Version" name="check-version-button" />
+                        <engine:Label name="version-result" style="margin-top: 10px;" />
+                    </engine:VisualElement>
+                    
+                    <engine:VisualElement name="npm-check-container" style="display: none; margin-top: 15px; flex-direction: column;">
+                        <engine:Label text="npm is required to install UGS CLI. Let&apos;s verify npm is available:" style="margin-bottom: 10px; white-space: normal;" />
+                        <engine:Button text="Check npm Version" name="check-npm-button" />
+                        <engine:Label name="npm-version-result" style="margin-top: 10px;" />
+                    </engine:VisualElement>
+                    
+                    <engine:VisualElement style="flex-direction: column;">
+                        <engine:Button text="Install UGS CLI (npm install -g ugs)" name="install-ugs-button" style="display: none; margin-top: 15px;" />
+                        <engine:Label name="install-progress" style="margin-top: 10px; white-space: normal; display: none;" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <engine:Button text="[Debug] Simulate Missing UGS" name="debug-simulate-button" style="height: 16px;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="step-2" style="flex-grow: 1; display: none;">
+                <engine:Label text="Step 2: Log In to UGS" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="Let's verify your UGS login status." style="margin-bottom: 20px; white-space: normal;" />
+                <engine:VisualElement style="margin-bottom: 20px; flex-direction: column;">
+                    <engine:VisualElement style="flex-direction: column;">
+                        <engine:Button text="Check UGS Login Status" name="check-login-button" />
+                        <engine:Label name="login-status-result" style="margin-top: 10px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement name="login-container" style="display: none; margin-top: 15px; flex-direction: column;">
+                        <engine:Label text="Please log in to UGS to continue:" style="margin-bottom: 10px; white-space: normal;" />
+                        <engine:Button text="Log In to UGS" name="login-button" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+            </engine:VisualElement>
+            <engine:VisualElement name="step-3" style="flex-grow: 1; display: none;">
+                <engine:Label text="Label" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement class="button-container" style="flex-direction: row; align-items: center; justify-content: space-between;">
+            <engine:Button text="Previous" name="previous-button" />
+            <engine:Button text="Next" name="next-button" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

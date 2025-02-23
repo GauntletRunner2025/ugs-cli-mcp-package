@@ -1,0 +1,61 @@
+.container {
+    padding: 16px;
+}
+
+.header {
+    -unity-font-style: bold;
+    font-size: 20px;
+}
+
+.steps-container {
+    flex-grow: 1;
+    margin: 16px 0;
+}
+
+.button-container {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding: 8px 16px;
+}
+
+.button-container Button {
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    border-width: 1px;
+    min-width: 120px;
+    -unity-font-style: bold;
+}
+
+.button-container Button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.step {
+    margin-bottom: 16px;
+    padding: 12px;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(128, 128, 128);
+}
+
+.step-header {
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.step-description {
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.step-complete {
+    background-color: rgba(0, 255, 0, 0.1);
+}
+
+.step-current {
+    background-color: rgba(0, 128, 255, 0.1);
+    border-color: rgb(0, 128, 255);
+}

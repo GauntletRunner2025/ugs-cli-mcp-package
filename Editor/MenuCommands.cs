@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEditor;
 using System.Diagnostics;
-using System.IO;
+using Debug = UnityEngine.Debug;
+using GauntletRunner2025.UgsCliMcp.Editor;
 
 namespace Gauntletrunner2025.UgsCliMcp.Editor
 {
@@ -9,6 +10,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
     {
         private const string WelcomeMessageShownKey = "UgsCliMcp_WelcomeMessageShown";
         private const string EnvironmentNameKey = "UgsCliMcp_EnvironmentName";
+        internal const string InstallationWindowShownKey = "GauntletRunner2025_UgsCliMcp_HasShownInstallationWindow";
         private const string ServiceRoleInstructionsLink = @"https://docs.unity.com/ugs/en-us/manual/game-server-hosting/manual/concepts/authentication-service-accounts";
         private const string LoginInstructions = @"echo Welcome to UGS CLI MCP Login! && echo. && " +
             @"echo Go to " + ServiceRoleInstructionsLink + " && " +
@@ -26,49 +28,11 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
             }
         }
 
-        [MenuItem("Tools/UGS CLI MCP/Login")]
-        private static void OpenUgsLogin()
+        [MenuItem("Gauntletrunner2025/UGS CLI MCP/Debug/Reset Installation Window")]
+        private static void ResetInstallationWindow()
         {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "cmd.exe",
-                Arguments = $"/K {LoginInstructions}",
-                UseShellExecute = true,
-                CreateNoWindow = false
-            };
-
-            try
-            {
-                Process.Start(startInfo);
-            }
-            catch (System.Exception ex)
-            {
-                UnityEngine.Debug.LogError($"Failed to start UGS login process: {ex.Message}");
-            }
-        }
-
-        [MenuItem("Tools/UGS CLI MCP/Configure Project")]
-        private static void ConfigureProject()
-        {
-            string projectId = CloudProjectSettings.projectId;
-            if (string.IsNullOrEmpty(projectId))
-            {
-                EditorUtility.DisplayDialog("Configure Project", 
-                    "No project ID found. Please make sure you have linked this project to Unity Cloud Services.", 
-                    "OK");
-                return;
-            }
-
-            string currentEnv = EditorPrefs.GetString(EnvironmentNameKey, "production");
-            string environment = EditorInputDialog.Show("Configure Project", 
-                "Enter the environment name:", 
-                currentEnv);
-
-            if (!string.IsNullOrEmpty(environment))
-            {
-                EditorPrefs.SetString(EnvironmentNameKey, environment);
-                UnityEngine.Debug.Log($"Project configuration set:\nProject ID: {projectId}\nEnvironment: {environment}");
-            }
+            EditorPrefs.DeleteKey(InstallationWindowShownKey);
+            Debug.Log("Installation window flag has been reset. The window will show next time Unity loads.");
         }
 
         internal static string WelcomeMessageKey => WelcomeMessageShownKey;
