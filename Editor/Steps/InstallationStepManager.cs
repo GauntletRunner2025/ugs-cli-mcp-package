@@ -14,6 +14,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         public event Action<bool> OnStepCompletionChanged;
         public event Action<bool> OnCanNavigateNextChanged;
         public event Action<bool> OnCanNavigatePreviousChanged;
+        public event Action<int> OnStepChanged;
 
         public InstallationStepManager(VisualElement rootElement)
         {
@@ -54,6 +55,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
 
             UpdateNavigationState();
+            OnStepChanged?.Invoke(currentStep);
         }
 
         public void SetStepCompletion(bool completed)
@@ -72,7 +74,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         private void UpdateNavigationState()
         {
             var canNavigatePrevious = currentStep > 0;
-            var canNavigateNext = currentStep < steps.Length - 1 && stepCompleted[currentStep];
+            var canNavigateNext = currentStep == steps.Length - 1 || stepCompleted[currentStep];  // Always enable on last step
 
             Debug.Log($"Step {currentStep} navigation state - Previous: {canNavigatePrevious}, Next: {canNavigateNext}, Completed: {stepCompleted[currentStep]}");
 
@@ -81,5 +83,6 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         }
 
         public int CurrentStepIndex => currentStep;
+        public int TotalSteps => steps.Length;
     }
 }

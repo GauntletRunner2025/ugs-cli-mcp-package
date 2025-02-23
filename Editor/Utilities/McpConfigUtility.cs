@@ -13,7 +13,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
         public const string GlobalConfigFileName = "mcp_config.json";
         public static string ConfigSubPath = System.IO.Path.Combine(".codeium", "windsurf-next");
 
-        [MenuItem("Tools/UGS CLI MCP/Open Global Config")]
+        [MenuItem("Tools/UGS CLI MCP/Windsurf/Open MCP Config")]
         public static void OpenGlobalConfig()
         {
             string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

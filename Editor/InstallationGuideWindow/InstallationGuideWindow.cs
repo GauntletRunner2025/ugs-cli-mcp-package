@@ -16,6 +16,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         private Button simulateNotInstalledButton;
         private Button checkLoginButton;
         private Button loginButton;
+        private Button doneButton;
         private Label versionResultLabel;
         private Label npmVersionResultLabel;
         private Label installProgressLabel;
@@ -41,6 +42,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             simulateNotInstalledButton = rootVisualElement.Q<Button>("debug-simulate-button");
             checkLoginButton = rootVisualElement.Q<Button>("check-login-button");
             loginButton = rootVisualElement.Q<Button>("login-button");
+            doneButton = rootVisualElement.Q<Button>("done-button");
             versionResultLabel = rootVisualElement.Q<Label>("version-result");
             npmVersionResultLabel = rootVisualElement.Q<Label>("npm-version-result");
             installProgressLabel = rootVisualElement.Q<Label>("install-progress");
@@ -52,6 +54,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             stepManager = new InstallationStepManager(rootVisualElement);
             stepManager.OnCanNavigateNextChanged += canNavigate => nextButton.SetEnabled(canNavigate);
             stepManager.OnCanNavigatePreviousChanged += canNavigate => previousButton.SetEnabled(canNavigate);
+            stepManager.OnStepChanged += OnStepChanged;
 
             // Setup button clicks
             previousButton.clicked += () => stepManager.NavigateStep(-1);
@@ -62,6 +65,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             simulateNotInstalledButton.clicked += SimulateUgsNotInstalled;
             checkLoginButton.clicked += CheckLoginStatus;
             loginButton.clicked += LoginToUgs;
+            doneButton.clicked += OnDoneButtonClicked;
 
             // Setup project ID UI
             SetupProjectIdUI();
@@ -71,6 +75,19 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
 
             // Show first step
             stepManager.NavigateStep(0);
+        }
+
+        private void OnStepChanged(int stepIndex)
+        {
+            bool isLastStep = stepIndex == stepManager.TotalSteps - 1;
+            nextButton.text = isLastStep ? "Done" : "Next";
+            nextButton.style.display = isLastStep ? DisplayStyle.None : DisplayStyle.Flex;
+            doneButton.style.display = isLastStep ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void OnDoneButtonClicked()
+        {
+            throw new NotImplementedException();
         }
 
         private void LoginToUgs()

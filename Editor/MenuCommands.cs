@@ -28,13 +28,6 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor
             }
         }
 
-        [MenuItem("Gauntletrunner2025/UGS CLI MCP/Debug/Reset Installation Window")]
-        private static void ResetInstallationWindow()
-        {
-            EditorPrefs.DeleteKey(InstallationWindowShownKey);
-            Debug.Log("Installation window flag has been reset. The window will show next time Unity loads.");
-        }
-
         internal static string WelcomeMessageKey => WelcomeMessageShownKey;
         internal static string GetEnvironmentName() => EditorPrefs.GetString(EnvironmentNameKey, "production");
         internal static string GetProjectId() => CloudProjectSettings.projectId;

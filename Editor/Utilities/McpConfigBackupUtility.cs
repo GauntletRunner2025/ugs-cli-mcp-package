@@ -7,7 +7,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class McpConfigBackupUtility
     {
-        [MenuItem("Tools/UGS CLI MCP/Revert to Backup Config", validate = true)]
+        [MenuItem("Tools/UGS CLI MCP/Windsurf/Revert to Backup Config", validate = true)]
         public static bool ValidateRevertToBackup()
         {
             string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -16,7 +16,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             return File.Exists(backupPath);
         }
 
-        [MenuItem("Tools/UGS CLI MCP/Revert to Backup Config")]
+        [MenuItem("Tools/UGS CLI MCP/Windsurf/Revert to Backup Config")]
         public static void RevertToBackupConfig()
         {
             string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

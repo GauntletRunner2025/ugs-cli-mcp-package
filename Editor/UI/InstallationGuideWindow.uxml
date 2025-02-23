@@ -73,6 +73,7 @@
                 <engine:Label text="To test it's working, try asking Cascade:" style="margin-bottom: 10px; white-space: normal;" />
                 <engine:Label text="'What version of UGS CLI is installed?'" style="margin-bottom: 20px; white-space: normal; -unity-font-style: italic;" />
                 <engine:Label text="The agent should respond with the version number we verified in Step 1." style="margin-bottom: 10px; white-space: normal;" />
+                <engine:Button text="Done" name="done-button" style="margin-top: 20px;" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement class="button-container" style="flex-direction: row; align-items: center; justify-content: space-between;">
