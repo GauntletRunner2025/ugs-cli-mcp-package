@@ -102,6 +102,7 @@ import { registerGetBuild } from "./tools/game-server-hosting/builds/get-build.j
 // import{registerListBuildInternals} from "./tools/game-server-hosting/builds/list-build-internals.js";
 import { registerListBuilds } from "./tools/game-server-hosting/builds/list-builds.js";
 import { registerUpdateBuild } from "./tools/game-server-hosting/builds/update-build.js";
+import { registerDeploy } from "./tools/deploy.js";
 
 
 async function main() {
@@ -112,6 +113,14 @@ async function main() {
 
   // Register all tools
   registerGetVersionHandler(server);
+
+  //Config
+  registerDeleteConfig(server);
+  registerGetConfig(server);
+  registerSetConfig(server);
+
+  //Deploy
+  // registerDeploy(server);
 
   // //Cloud save
   // registerListCustomDataIDs(server);
@@ -131,10 +140,6 @@ async function main() {
   // registerLogout(server);
   // registerStatus(server);
 
-  //Config
-  registerDeleteConfig(server);
-  registerGetConfig(server);
-  registerSetConfig(server);
 
   //Access- Not supported
   // registerDeletePlayerPolicyStatements(server);

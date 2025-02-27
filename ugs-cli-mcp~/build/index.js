@@ -5,6 +5,7 @@ import { registerGetVersionHandler } from "./tools/get-version.js";
 import { registerDeleteConfig } from "./tools/configuration/delete-config.js";
 import { registerGetConfig } from "./tools/configuration/get-config.js";
 import { registerSetConfig } from "./tools/configuration/set-config.js";
+import { registerDeploy } from "./tools/deploy.js";
 async function main() {
     const server = new McpServer({
         name: "weather",
@@ -12,6 +13,12 @@ async function main() {
     });
     // Register all tools
     registerGetVersionHandler(server);
+    //Config
+    registerDeleteConfig(server);
+    registerGetConfig(server);
+    registerSetConfig(server);
+    //Deploy
+    registerDeploy(server);
     // //Cloud save
     // registerListCustomDataIDs(server);
     // registerCreateCustomIndex(server);
@@ -27,10 +34,6 @@ async function main() {
     // registerLogin(server);
     // registerLogout(server);
     // registerStatus(server);
-    //Config
-    registerDeleteConfig(server);
-    registerGetConfig(server);
-    registerSetConfig(server);
     //Access- Not supported
     // registerDeletePlayerPolicyStatements(server);
     // registerDeleteProjectPolicyStatements(server);

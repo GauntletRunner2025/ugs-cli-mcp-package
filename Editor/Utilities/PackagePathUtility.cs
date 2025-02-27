@@ -7,8 +7,8 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class PackagePathUtility
     {
-        private const string PackageName = "com.gauntletrunner2025.ugs-cli-mcp-core";
-        private const string AssetsPath = "Assets/com.gauntletrunner2025.ugs-cli-mcp";
+        private static readonly string PackageName = "ugs-cli-mcp-package";
+        private static readonly string AssetsPath = Path.Combine("Assets", "ugs-cli-mcp-package");
         private const string DeveloperModeKey = "MCPDeveloperMode";
 
         public static string GetPackagePath()
@@ -35,7 +35,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             else
             {
                 // In package mode, use the package manager path
-                var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath($"Packages/{PackageName}");
+                var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(Path.Combine("Packages", PackageName));
                 if (packageInfo != null)
                 {
                     Debug.Log($"Using package mode path: {packageInfo.resolvedPath}");
