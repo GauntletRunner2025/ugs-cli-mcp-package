@@ -10,20 +10,60 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class PackagePathUtility
     {
-        private static readonly string PackageName = "ugs-cli-mcp-package";
+        // Package may be referenced by either of these names
+        private static readonly string[] PackageNames = new string[] {
+            "ugs-cli-mcp-package", 
+            "ugs-cli-mcp-core",
+            "com.gauntletrunner2025.ugs-cli-mcp-core"
+        };
         private static readonly string AssetsPath = Path.Combine("Assets", "ugs-cli-mcp-package");
         private const string DeveloperModeKey = "MCPDeveloperMode";
         private const string LastResolvedPathKey = "MCPLastResolvedPath";
+        private const string VerboseModeKey = "MCPVerboseLogging";
         
         static PackagePathUtility()
         {
-            LogDebug("PackagePathUtility initialized");
+            LogDebug("PackagePathUtility initialized", true);
         }
         
-        private static void LogDebug(string message)
+        /// <summary>
+        /// Menu item to toggle verbose logging on/off
+        /// </summary>
+        [MenuItem("Tools/MCP Package/Toggle Verbose Logging")]
+        private static void ToggleVerboseLogging()
         {
-            // Always use LogError for visibility in the console
-            Debug.LogError($"[MCP DEBUG] {message}");
+            VerboseLogging = !VerboseLogging;
+            Debug.Log($"[MCP] Verbose logging is now {(VerboseLogging ? "enabled" : "disabled")}");
+        }
+        
+        /// <summary>
+        /// Menu item validation that shows a checkmark when verbose logging is enabled
+        /// </summary>
+        [MenuItem("Tools/MCP Package/Toggle Verbose Logging", true)]
+        private static bool ToggleVerboseLoggingValidate()
+        {
+            Menu.SetChecked("Tools/MCP Package/Toggle Verbose Logging", VerboseLogging);
+            return true;
+        }
+        
+        /// <summary>
+        /// Gets or sets whether verbose logging is enabled
+        /// </summary>
+        public static bool VerboseLogging
+        {
+            get => EditorPrefs.GetBool(VerboseModeKey, false);
+            set => EditorPrefs.SetBool(VerboseModeKey, value);
+        }
+        
+        private static void LogDebug(string message, bool alwaysLog = false)
+        {
+            // Only log if verbose mode is on or if this is an important message that should always be logged
+            if (VerboseLogging || alwaysLog)
+            {
+                // Use different prefixes based on importance
+                string prefix = alwaysLog ? "[MCP]" : "[MCP DEBUG]";
+                Debug.LogError($"{prefix} {message}");
+            }
         }
 
         public static string GetPackagePath()
@@ -51,7 +91,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // If we found a valid path, store it as a fallback for future use
             if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
             {
-                LogDebug($"✓ Using primary path: {resolvedPath}");
+                LogDebug($"✓ Using primary path: {resolvedPath}", true);
                 EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
                 return resolvedPath;
             }
@@ -62,7 +102,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 
             if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
             {
-                LogDebug($"✓ Using alternative path: {resolvedPath}");
+                LogDebug($"✓ Using alternative path: {resolvedPath}", true);
                 EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
                 return resolvedPath;
             }
@@ -70,7 +110,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Try package cache path
             if (!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath))
             {
-                LogDebug($"✓ Using package cache path: {cachePath}");
+                LogDebug($"✓ Using package cache path: {cachePath}", true);
                 EditorPrefs.SetString(LastResolvedPathKey, cachePath);
                 return cachePath;
             }
@@ -78,12 +118,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Last resort: try to use the cached path from a previous successful resolution
             if (!string.IsNullOrEmpty(lastKnownPath) && Directory.Exists(lastKnownPath))
             {
-                LogDebug($"✓ Using last known working path: {lastKnownPath}");
+                LogDebug($"✓ Using last known working path: {lastKnownPath}", true);
                 return lastKnownPath;
             }
             
             // If all else fails, dump diagnostic info
-            LogDebug("!!! FAILED TO RESOLVE PACKAGE PATH !!!");
+            LogDebug("!!! FAILED TO RESOLVE PACKAGE PATH !!!", true);
             DumpDiagnosticInfo();
             return string.Empty;
         }
@@ -124,11 +164,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 }
                 
                 sb.AppendLine("=== END DIAGNOSTIC INFO ===");
-                LogDebug(sb.ToString());
+                // Always log diagnostic info when something fails
+                LogDebug(sb.ToString(), true);
             }
             catch (Exception ex)
             {
-                LogDebug($"Error during diagnostics: {ex.Message}");
+                LogDebug($"Error during diagnostics: {ex.Message}", true);
             }
         }
         
@@ -152,7 +193,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             }
             catch (Exception ex)
             {
-                LogDebug($"Error in TryGetDeveloperModePath: {ex.Message}");
+                LogDebug($"Error in TryGetDeveloperModePath: {ex.Message}", true);
             }
             return string.Empty;
         }
@@ -161,25 +202,31 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
         {
             try
             {
-                // Try the standard package manager path first
-                var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(Path.Combine("Packages", PackageName));
-                if (packageInfo != null && !string.IsNullOrEmpty(packageInfo.resolvedPath))
+                // Try each package name variant
+                foreach (string packageName in PackageNames)
                 {
-                    LogDebug($"Package info found: {packageInfo.name} at {packageInfo.resolvedPath}");
-                    LogDebug($"Package source: {packageInfo.source}, Version: {packageInfo.version}");
+                    LogDebug($"Trying to find package with name: {packageName}");
                     
-                    if (Directory.Exists(packageInfo.resolvedPath))
+                    // Try the standard package manager path first
+                    var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(Path.Combine("Packages", packageName));
+                    if (packageInfo != null && !string.IsNullOrEmpty(packageInfo.resolvedPath))
                     {
-                        return packageInfo.resolvedPath;
+                        LogDebug($"Package info found: {packageInfo.name} at {packageInfo.resolvedPath}");
+                        LogDebug($"Package source: {packageInfo.source}, Version: {packageInfo.version}");
+                        
+                        if (Directory.Exists(packageInfo.resolvedPath))
+                        {
+                            return packageInfo.resolvedPath;
+                        }
+                        else
+                        {
+                            LogDebug($"Package resolvedPath directory does not exist: {packageInfo.resolvedPath}");
+                        }
                     }
                     else
                     {
-                        LogDebug($"Package resolvedPath directory does not exist: {packageInfo.resolvedPath}");
+                        LogDebug($"PackageInfo.FindForAssetPath returned null or empty resolvedPath for {packageName}");
                     }
-                }
-                else
-                {
-                    LogDebug("PackageInfo.FindForAssetPath returned null or empty resolvedPath");
                 }
                 
                 // If that fails, try finding the package via package list
@@ -197,34 +244,35 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                     foreach (var pkg in listRequest.Result)
                     {
                         LogDebug($"Package: {pkg.name}, Path: {pkg.resolvedPath}, Source: {pkg.source}");
+                        
+                        // Check if this package matches any of our known names
+                        foreach (string packageName in PackageNames)
+                        {
+                            if (pkg.name.Contains(packageName))
+                            {
+                                LogDebug($"Found matching package via list: {pkg.name} at {pkg.resolvedPath}", true);
+                                if (!string.IsNullOrEmpty(pkg.resolvedPath) && Directory.Exists(pkg.resolvedPath))
+                                {
+                                    return pkg.resolvedPath;
+                                }
+                                else
+                                {
+                                    LogDebug($"Package list resolvedPath directory does not exist: {pkg.resolvedPath}");
+                                }
+                            }
+                        }
                     }
                     
-                    var package = listRequest.Result.FirstOrDefault(p => p.name.Contains(PackageName));
-                    if (package != null && !string.IsNullOrEmpty(package.resolvedPath))
-                    {
-                        LogDebug($"Found package via list: {package.resolvedPath}");
-                        if (Directory.Exists(package.resolvedPath))
-                        {
-                            return package.resolvedPath;
-                        }
-                        else
-                        {
-                            LogDebug($"Package list resolvedPath directory does not exist: {package.resolvedPath}");
-                        }
-                    }
-                    else
-                    {
-                        LogDebug($"No package with name containing '{PackageName}' found in package list");
-                    }
+                    LogDebug($"No package matching any of the known names found in package list");
                 }
                 else
                 {
-                    LogDebug($"Package list request failed with status: {listRequest.Status}, Error: {listRequest.Error?.message}");
+                    LogDebug($"Package list request failed with status: {listRequest.Status}, Error: {listRequest.Error?.message}", true);
                 }
             }
             catch (Exception ex)
             {
-                LogDebug($"Error in TryGetPackageModePath: {ex.Message}, StackTrace: {ex.StackTrace}");
+                LogDebug($"Error in TryGetPackageModePath: {ex.Message}, StackTrace: {ex.StackTrace}", true);
             }
             
             return string.Empty;
@@ -240,36 +288,47 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 
                 if (!Directory.Exists(packageCachePath))
                 {
-                    LogDebug($"Package cache directory not found: {packageCachePath}");
+                    LogDebug($"Package cache directory not found: {packageCachePath}", true);
                     return string.Empty;
                 }
                 
                 LogDebug($"Scanning package cache at {packageCachePath}");
                 
-                // Look for directories that might contain our package (including those with hash suffixes)
-                var packageDirs = Directory.GetDirectories(packageCachePath)
-                                          .Where(dir => Path.GetFileName(dir).StartsWith(PackageName) || 
-                                                 Path.GetFileName(dir).Contains(PackageName + "@"))
-                                          .ToArray();
+                // Get all directories in the package cache
+                var allDirs = Directory.GetDirectories(packageCachePath);
+                LogDebug($"Found {allDirs.Length} total directories in package cache");
                 
-                LogDebug($"Found {packageDirs.Length} potential package directories in cache");
-                foreach (var dir in packageDirs)
+                // Look for directories that might contain our package (including those with hash suffixes)
+                var packageDirs = new System.Collections.Generic.List<string>();
+                
+                foreach (string dir in allDirs)
                 {
-                    LogDebug($"Potential cache dir: {dir}");
+                    string dirName = Path.GetFileName(dir);
+                    foreach (string packageName in PackageNames)
+                    {
+                        if (dirName.StartsWith(packageName) || dirName.Contains(packageName + "@"))
+                        {
+                            LogDebug($"Potential cache dir for '{packageName}': {dir}");
+                            packageDirs.Add(dir);
+                            break;
+                        }
+                    }
                 }
                 
-                if (packageDirs.Length > 0)
+                LogDebug($"Found {packageDirs.Count} potential package directories in cache");
+                
+                if (packageDirs.Count > 0)
                 {
                     // Sort by creation time to get most recent
-                    Array.Sort(packageDirs, (a, b) => Directory.GetCreationTime(b).CompareTo(Directory.GetCreationTime(a)));
+                    packageDirs.Sort((a, b) => Directory.GetCreationTime(b).CompareTo(Directory.GetCreationTime(a)));
                     string mostRecentPackageDir = packageDirs[0];
-                    LogDebug($"Selected most recent package in cache: {mostRecentPackageDir}");
+                    LogDebug($"Selected most recent package in cache: {mostRecentPackageDir}", true);
                     return mostRecentPackageDir;
                 }
             }
             catch (Exception ex)
             {
-                LogDebug($"Error in FindPackageInPackageCache: {ex.Message}");
+                LogDebug($"Error in FindPackageInPackageCache: {ex.Message}", true);
             }
             
             return string.Empty;
