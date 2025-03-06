@@ -193,7 +193,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 
                 if (listRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
                 {
-                    LogDebug($"Package list request succeeded, found {listRequest.Result.Length} packages.");
+                    LogDebug($"Package list request succeeded, found {listRequest.Result.Count()} packages.");
                     foreach (var pkg in listRequest.Result)
                     {
                         LogDebug($"Package: {pkg.name}, Path: {pkg.resolvedPath}, Source: {pkg.source}");
