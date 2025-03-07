@@ -10,6 +10,12 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
     {
         private const string UiPath = "Editor/UI";
 
+        // Ensure LogDebug function is accessible
+        private static void LogDebug(string message, bool verboseOnly = true)
+        {
+            PackagePathUtility.LogDebug(message, verboseOnly);
+        }
+
         private static string GetAssetPath(string fileName)
         {
             // Use the enhanced PackagePathUtility to determine the correct package path
