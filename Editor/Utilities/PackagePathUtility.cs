@@ -32,42 +32,6 @@ public static class PackagePathUtility
     private static bool isPackagePathCached;
     private static bool wasDeveloperMode;
     
-    public static bool VerboseLogging
-    {
-        get => EditorPrefs.GetBool(VerboseModeKey, false);
-        set => EditorPrefs.SetBool(VerboseModeKey, value);
-    }
-
-    public static bool DeveloperMode
-    {
-        get => EditorPrefs.GetBool(DeveloperModeKey, false);
-        set
-        {
-            if (value != DeveloperMode)
-            {
-                ClearPackagePathCache();
-            }
-            EditorPrefs.SetBool(DeveloperModeKey, value);
-        }
-    }
-
-    public static void LogDebug(string message, bool verboseOnly = true)
-    {
-        if (verboseOnly && !VerboseLogging)
-        {
-            return;
-        }
-
-        try
-        {
-            File.AppendAllText(LogFilePath, $"[{DateTime.Now:HH:mm:ss.fff}] {message}\n");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Failed to write to debug log: {ex.Message}");
-        }
-    }
-
     static PackagePathUtility()
     {
         if (File.Exists(LogFilePath))
