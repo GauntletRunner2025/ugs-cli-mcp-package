@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System;
 using System.Text;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public static class PackagePathUtility
 {
