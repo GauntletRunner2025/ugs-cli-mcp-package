@@ -13,12 +13,12 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         private static string GetAssetPath(string fileName)
         {
             // Use the enhanced PackagePathUtility to determine the correct package path
-            Debug.LogError($"[MCP DEBUG] BaseInstallationWindow.GetAssetPath called for {fileName}");
+            LogDebug($"BaseInstallationWindow.GetAssetPath called for {fileName}", false);
             string packagePath = PackagePathUtility.GetPackagePath();
             
             if (string.IsNullOrEmpty(packagePath))
             {
-                Debug.LogError($"[MCP DEBUG] PackagePathUtility.GetPackagePath returned empty path");
+                LogDebug("PackagePathUtility.GetPackagePath returned empty path", false);
                 return string.Empty;
             }
             
@@ -38,11 +38,11 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                     packageName = cacheFolder.Substring(0, cacheFolder.IndexOf('@'));
                 }
                 
-                Debug.LogError($"[MCP DEBUG] Detected package cache. Package name: {packageName}");
+                LogDebug($"Detected package cache. Package name: {packageName}", false);
                 
                 // Create a package: relative path which Unity's AssetDatabase can understand
                 string packageRelativePath = $"Packages/{packageName}/{UiPath}/{fileName}";
-                Debug.LogError($"[MCP DEBUG] Package-relative path: {packageRelativePath}");
+                LogDebug($"Package-relative path: {packageRelativePath}", false);
                 return packageRelativePath;
             }
             else if (packagePath.StartsWith(Application.dataPath))
@@ -55,7 +55,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                 // Replace backslashes with forward slashes (Unity preference)
                 assetPath = assetPath.Replace('\\', '/');
                 
-                Debug.LogError($"[MCP DEBUG] Assets-relative path: {assetPath}");
+                LogDebug($"Assets-relative path: {assetPath}", false);
                 return assetPath;
             }
             else
@@ -71,14 +71,14 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                     string relativePath = fullPath.Substring(projectPath.Length + 1);
                     // Replace backslashes with forward slashes (Unity preference)
                     relativePath = relativePath.Replace('\\', '/');
-                    Debug.LogError($"[MCP DEBUG] Project-relative path: {relativePath}");
+                    LogDebug($"Project-relative path: {relativePath}", false);
                     return relativePath;
                 }
                 else
                 {
                     // If it's outside the project, we'll try a direct approach by checking if the file exists
                     // This should generally be avoided but might help during debugging
-                    Debug.LogError($"[MCP DEBUG] Warning: Path is outside project. Full path: {fullPath}");
+                    LogDebug($"Warning: Path is outside project. Full path: {fullPath}", false);
                     return fullPath;
                 }
             }
@@ -96,15 +96,15 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
 
         protected virtual void CreateGUI()
         {
-            Debug.LogError("[MCP DEBUG] BaseInstallationWindow.CreateGUI called");
+            LogDebug("BaseInstallationWindow.CreateGUI called", false);
             
             // Get UXML path
             string uxmlPath = GetUxmlPath();
-            Debug.LogError($"[MCP DEBUG] UXML Path: {uxmlPath}");
+            LogDebug($"UXML Path: {uxmlPath}", false);
             
             if (string.IsNullOrEmpty(uxmlPath))
             {
-                Debug.LogError("[MCP DEBUG] UXML path is empty, cannot load UI");
+                LogDebug("UXML path is empty, cannot load UI", false);
                 return;
             }
             
@@ -112,34 +112,33 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
             if (visualTree == null)
             {
-                Debug.LogError($"[MCP DEBUG] Could not find UXML at path: {uxmlPath}");
+                LogDebug($"Could not find UXML at path: {uxmlPath}", false);
                 
                 // Check if this is a path issue by checking if the file physically exists
                 if (uxmlPath.StartsWith("Packages/") || uxmlPath.StartsWith("Assets/"))
                 {
                     // The path looks correct for AssetDatabase, file might not exist
-                    Debug.LogError($"[MCP DEBUG] Path is in the correct format for AssetDatabase, but asset couldn't be found");
+                    LogDebug("Path is in the correct format for AssetDatabase, but asset couldn't be found", false);
                 }
                 else if (File.Exists(uxmlPath))
                 {
-                    Debug.LogError($"[MCP DEBUG] File exists at {uxmlPath} but AssetDatabase path format is incorrect");
+                    LogDebug($"File exists at {uxmlPath} but AssetDatabase path format is incorrect", false);
                     
                     // Attempt to find the package in the asset database
                     var guids = AssetDatabase.FindAssets("InstallationGuideWindow t:VisualTreeAsset");
                     if (guids.Length > 0)
                     {
                         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                        Debug.LogError($"[MCP DEBUG] Found UXML via GUID search at: {path}");
-                        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
+                        LogDebug($"Found UXML via GUID search at: {path}", false);
                     }
                     else
                     {
-                        Debug.LogError("[MCP DEBUG] Could not find UXML via GUID search");
+                        LogDebug("Could not find UXML via GUID search", false);
                     }
                 }
                 else
                 {
-                    Debug.LogError($"[MCP DEBUG] File does not exist at path: {uxmlPath}");
+                    LogDebug($"File does not exist at path: {uxmlPath}", false);
                 }
                 
                 if (visualTree == null)
@@ -150,7 +149,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                     
                     if (visualTree == null)
                     {
-                        Debug.LogError("[MCP DEBUG] Still could not load UXML after refreshing AssetDatabase");
+                        LogDebug("Still could not load UXML after refreshing AssetDatabase", false);
                         return;
                     }
                 }
@@ -160,7 +159,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
 
             // Get USS path
             string ussPath = GetUssPath();
-            Debug.LogError($"[MCP DEBUG] USS Path: {ussPath}");
+            LogDebug($"USS Path: {ussPath}", false);
             
             // Import USS
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ussPath);
@@ -170,7 +169,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
             else
             {
-                Debug.LogError($"[MCP DEBUG] Could not find USS at path: {ussPath}");
+                LogDebug($"Could not find USS at path: {ussPath}", false);
             }
 
             OnUICreated();
