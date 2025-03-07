@@ -30,6 +30,11 @@ public static class PackagePathUtility
         }
     }
     
+    // Cache the package path to avoid redundant resolution
+    private static string cachedPackagePath;
+    private static bool isPackagePathCached;
+    private static bool wasDeveloperMode;
+    
     static PackagePathUtility()
     {
         // Clear out the log file on initialization
@@ -38,7 +43,6 @@ public static class PackagePathUtility
             File.Delete(LogFilePath);
         }
         
-        // Create a header in the log file
         try
         {
             string header = $"=== MCP Debug Log ===\n" +
@@ -55,7 +59,8 @@ public static class PackagePathUtility
             Debug.LogError($"Failed to create log file header: {ex.Message}");
         }
         
-        LogDebug("PackagePathUtility initialized", false);
+        LogDebug("initialized", false);
+        wasDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
     }
     
     /// <summary>
@@ -103,6 +108,8 @@ public static class PackagePathUtility
                 string fileName = Path.GetFileName(frame.GetFileName() ?? "Unknown");
                 int lineNumber = frame.GetFileLineNumber();
                 string methodName = frame.GetMethod()?.Name ?? "Unknown";
+                // Add () after the method name
+                methodName = $"{methodName}()";
                 
                 string fileMessage = $"({fileName}:{lineNumber} in {methodName}) {logMessage}\n";
                 File.AppendAllText(LogFilePath, fileMessage);
@@ -118,8 +125,34 @@ public static class PackagePathUtility
     {
         LogDebug("=== GetPackagePath() CALLED ===");
         
+        bool currentDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
+        
+        // Invalidate cache if developer mode changed
+        if (currentDeveloperMode != wasDeveloperMode)
+        {
+            LogDebug($"mode changed from {wasDeveloperMode} to {currentDeveloperMode}, clearing cache", true);
+            ClearPackagePathCache();
+            wasDeveloperMode = currentDeveloperMode;
+        }
+        
+        // Return cached path if available and still exists
+        if (isPackagePathCached && !string.IsNullOrEmpty(cachedPackagePath))
+        {
+            // Verify the cached path still exists
+            if (Directory.Exists(cachedPackagePath))
+            {
+                LogDebug("using cached path", true);
+                return cachedPackagePath;
+            }
+            else
+            {
+                LogDebug("cached path no longer exists, clearing cache", true);
+                ClearPackagePathCache();
+            }
+        }
+        
         var isDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
-        LogDebug($"Developer Mode: {isDeveloperMode}", false);  // Always log mode for troubleshooting
+        LogDebug($"developer mode: {isDeveloperMode}", false);  // Always log mode for troubleshooting
         
         // Find all possible paths
         string devModePath = TryGetDeveloperModePath();
@@ -142,8 +175,10 @@ public static class PackagePathUtility
         // If we found a valid path, store it as a fallback for future use
         if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
         {
-            LogDebug($"Using path: {resolvedPath}", false);
+            LogDebug($"using path: {resolvedPath}", false);
             EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
+            cachedPackagePath = resolvedPath;
+            isPackagePathCached = true;
             return resolvedPath;
         }
         
@@ -152,23 +187,27 @@ public static class PackagePathUtility
 
         if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
         {
-            LogDebug($"Using alternative path: {resolvedPath}", false);
+            LogDebug($"using alternative path: {resolvedPath}", false);
             EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
+            cachedPackagePath = resolvedPath;
+            isPackagePathCached = true;
             return resolvedPath;
         }
         
         // Try package cache path
         if (!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath))
         {
-            LogDebug($"Using package cache path: {cachePath}", false);
+            LogDebug($"using package cache path: {cachePath}", false);
             EditorPrefs.SetString(LastResolvedPathKey, cachePath);
+            cachedPackagePath = cachePath;
+            isPackagePathCached = true;
             return cachePath;
         }
         
         // Last resort: try to use the cached path from a previous successful resolution
         if (!string.IsNullOrEmpty(lastKnownPath) && Directory.Exists(lastKnownPath))
         {
-            LogDebug($"Using last known working path: {lastKnownPath}", false);
+            LogDebug($"using last known working path: {lastKnownPath}", false);
             return lastKnownPath;
         }
         
@@ -176,6 +215,13 @@ public static class PackagePathUtility
         LogDebug("Failed to resolve package path - no valid paths found", false);
         DumpDiagnosticInfo();
         return string.Empty;
+    }
+    
+    public static void ClearPackagePathCache()
+    {
+        LogDebug("clearing cache", true);
+        cachedPackagePath = null;
+        isPackagePathCached = false;
     }
     
     private static void DumpDiagnosticInfo()
@@ -233,12 +279,12 @@ public static class PackagePathUtility
 
             if (Directory.Exists(fullAssetsPath))
             {
-                LogDebug($"Developer mode path resolved: {fullAssetsPath}");
+                LogDebug($"developer mode path resolved: {fullAssetsPath}");
                 return fullAssetsPath;
             }
             else
             {
-                LogDebug($"Developer mode path not found: {fullAssetsPath}");
+                LogDebug($"developer mode path not found: {fullAssetsPath}");
             }
         }
         catch (Exception ex)
@@ -255,14 +301,14 @@ public static class PackagePathUtility
             // Try each package name variant
             foreach (string packageName in PackageNames)
             {
-                LogDebug($"Trying to find package with name: {packageName}");
+                LogDebug($"trying to find package with name: {packageName}");
                 
                 // Try the standard package manager path first
                 var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(Path.Combine("Packages", packageName));
                 if (packageInfo != null && !string.IsNullOrEmpty(packageInfo.resolvedPath))
                 {
-                    LogDebug($"Package info found: {packageInfo.name} at {packageInfo.resolvedPath}");
-                    LogDebug($"Package source: {packageInfo.source}, Version: {packageInfo.version}");
+                    LogDebug($"package info found: {packageInfo.name} at {packageInfo.resolvedPath}");
+                    LogDebug($"package source: {packageInfo.source}, Version: {packageInfo.version}");
                     
                     if (Directory.Exists(packageInfo.resolvedPath))
                     {
@@ -270,7 +316,7 @@ public static class PackagePathUtility
                     }
                     else
                     {
-                        LogDebug($"Package resolvedPath directory does not exist: {packageInfo.resolvedPath}");
+                        LogDebug($"package resolvedPath directory does not exist: {packageInfo.resolvedPath}");
                     }
                 }
                 else
@@ -280,7 +326,7 @@ public static class PackagePathUtility
             }
             
             // If that fails, try finding the package via package list
-            LogDebug("Attempting to find package in package list...");
+            LogDebug("attempting to find package in package list...");
             var listRequest = UnityEditor.PackageManager.Client.List(true);
             while (!listRequest.IsCompleted)
             {
@@ -290,10 +336,10 @@ public static class PackagePathUtility
             
             if (listRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
             {
-                LogDebug($"Package list request succeeded, found {listRequest.Result.Count()} packages.");
+                LogDebug($"package list request succeeded, found {listRequest.Result.Count()} packages.");
                 foreach (var pkg in listRequest.Result)
                 {
-                    LogDebug($"Package: {pkg.name}, Path: {pkg.resolvedPath}, Source: {pkg.source}");
+                    LogDebug($"package: {pkg.name}, Path: {pkg.resolvedPath}, Source: {pkg.source}");
                     
                     // Check if this package matches any of our known names
                     foreach (string packageName in PackageNames)
@@ -302,22 +348,22 @@ public static class PackagePathUtility
                         {
                             if (!string.IsNullOrEmpty(pkg.resolvedPath) && Directory.Exists(pkg.resolvedPath))
                             {
-                                LogDebug($"Found matching package via list: {pkg.name} at {pkg.resolvedPath}", false);
+                                LogDebug($"found matching package via list: {pkg.name} at {pkg.resolvedPath}", false);
                                 return pkg.resolvedPath;
                             }
                             else
                             {
-                                LogDebug($"Package list resolvedPath directory does not exist: {pkg.resolvedPath}");
+                                LogDebug($"package list resolvedPath directory does not exist: {pkg.resolvedPath}");
                             }
                         }
                     }
                 }
                 
-                LogDebug($"No package matching any of the known names found in package list");
+                LogDebug($"no package matching any of the known names found in package list");
             }
             else
             {
-                LogDebug($"Package list request failed with status: {listRequest.Status}, Error: {listRequest.Error?.message}", false);
+                LogDebug($"package list request failed with status: {listRequest.Status}, Error: {listRequest.Error?.message}", false);
             }
         }
         catch (Exception ex)
@@ -338,15 +384,15 @@ public static class PackagePathUtility
             
             if (!Directory.Exists(packageCachePath))
             {
-                LogDebug($"Package cache directory not found: {packageCachePath}", false);
+                LogDebug($"package cache directory not found: {packageCachePath}", false);
                 return string.Empty;
             }
             
-            LogDebug($"Scanning package cache at {packageCachePath}");
+            LogDebug($"scanning package cache at {packageCachePath}");
             
             // Get all directories in the package cache
             var allDirs = Directory.GetDirectories(packageCachePath);
-            LogDebug($"Found {allDirs.Length} total directories in package cache");
+            LogDebug($"found {allDirs.Length} total directories in package cache");
             
             // Look for directories that might contain our package (including those with hash suffixes)
             var packageDirs = new System.Collections.Generic.List<string>();
@@ -358,21 +404,21 @@ public static class PackagePathUtility
                 {
                     if (dirName.StartsWith(packageName) || dirName.Contains(packageName + "@"))
                     {
-                        LogDebug($"Potential cache dir for '{packageName}': {dir}");
+                        LogDebug($"potential cache dir for '{packageName}': {dir}");
                         packageDirs.Add(dir);
                         break;
                     }
                 }
             }
             
-            LogDebug($"Found {packageDirs.Count} potential package directories in cache");
+            LogDebug($"found {packageDirs.Count} potential package directories in cache");
             
             if (packageDirs.Count > 0)
             {
                 // Sort by creation time to get most recent
                 packageDirs.Sort((a, b) => Directory.GetCreationTime(b).CompareTo(Directory.GetCreationTime(a)));
                 string mostRecentPackageDir = packageDirs[0];
-                LogDebug($"Selected most recent package in cache: {mostRecentPackageDir}", false);
+                LogDebug($"selected most recent package in cache: {mostRecentPackageDir}", false);
                 return mostRecentPackageDir;
             }
         }
