@@ -39,12 +39,12 @@ public static class PackagePathUtility
         // Create a header in the log file
         try
         {
-            string header = $"=== MCP Debug Log Started at {DateTime.Now:yyyy-MM-dd HH:mm:ss} ===\n" +
+            string header = $"=== MCP Debug Log ===\n" +
                           $"Project Path: {Path.GetDirectoryName(Application.dataPath)}\n" +
                           $"Developer Mode: {EditorPrefs.GetBool(DeveloperModeKey, false)}\n" +
                           $"Verbose Logging: {VerboseLogging}\n" +
                           $"Unity Version: {Application.unityVersion}\n" +
-                          "========================================\n\n";
+                          "==================\n\n";
             File.WriteAllText(LogFilePath, header);
         }
         catch (Exception ex)
@@ -93,17 +93,18 @@ public static class PackagePathUtility
             string logMessage = $"{prefix} {message}";
             Debug.Log(logMessage);
             
-            // Also write to file with timestamp
+            // Also write to file with calling method name
             try 
             {
-                string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                // Include stack trace in file but not in console
                 string stackTrace = Environment.StackTrace;
                 string callingMethod = stackTrace.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
                     .Skip(2) // Skip GetStackTrace and LogDebug
-                    .FirstOrDefault()?.Trim() ?? "Unknown";
+                    .FirstOrDefault()?
+                    .Trim()
+                    .Split(new[] { '(', ' ' }, StringSplitOptions.RemoveEmptyEntries) // Split on space or opening parenthesis
+                    .LastOrDefault() ?? "Unknown"; // Take the last part which should be just the method name
                     
-                string fileMessage = $"[{timestamp}] ({callingMethod}) {logMessage}\n";
+                string fileMessage = $"({callingMethod}) {logMessage}\n";
                 File.AppendAllText(LogFilePath, fileMessage);
             }
             catch (Exception ex)
