@@ -23,13 +23,13 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
         
         static PackagePathUtility()
         {
-            LogDebug("PackagePathUtility initialized");
+            LogDebug("PackagePathUtility initialized", false);
         }
         
         /// <summary>
         /// Menu item to toggle verbose logging on/off
         /// </summary>
-        [MenuItem("Tools/MCP Package/Toggle Verbose Logging")]
+        [MenuItem("Tools/UGS CLI MCP/Toggle Verbose Logging")]
         private static void ToggleVerboseLogging()
         {
             VerboseLogging = !VerboseLogging;
@@ -39,10 +39,10 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
         /// <summary>
         /// Menu item validation that shows a checkmark when verbose logging is enabled
         /// </summary>
-        [MenuItem("Tools/MCP Package/Toggle Verbose Logging", true)]
+        [MenuItem("Tools/UGS CLI MCP/Toggle Verbose Logging", true)]
         private static bool ToggleVerboseLoggingValidate()
         {
-            Menu.SetChecked("Tools/MCP Package/Toggle Verbose Logging", VerboseLogging);
+            Menu.SetChecked("Tools/UGS CLI MCP/Toggle Verbose Logging", VerboseLogging);
             return true;
         }
         
@@ -55,13 +55,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             set => EditorPrefs.SetBool(VerboseModeKey, value);
         }
         
-        private static void LogDebug(string message, bool alwaysLog = false)
+        private static void LogDebug(string message, bool verboseOnly = true)
         {
-            // Only log if verbose mode is on or if this is an important message that should always be logged
-            if (VerboseLogging || alwaysLog)
+            // Only log if this is not a verbose-only message, or if verbose mode is on
+            if (!verboseOnly || VerboseLogging)
             {
-                // Use different prefixes based on importance
-                string prefix = alwaysLog ? "[MCP]" : "[MCP DEBUG]";
+                string prefix = verboseOnly ? "[MCP DEBUG]" : "[MCP]";
                 Debug.Log($"{prefix} {message}");
             }
         }
@@ -71,6 +70,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             LogDebug("=== GetPackagePath() CALLED ===");
             
             var isDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
+            LogDebug($"Developer Mode: {isDeveloperMode}", false);  // Always log mode for troubleshooting
             
             // Find all possible paths
             string devModePath = TryGetDeveloperModePath();
@@ -81,7 +81,6 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Only log paths in verbose mode
             if (VerboseLogging)
             {
-                LogDebug($"Developer Mode: {isDeveloperMode}");
                 LogDebug($"Developer Mode Path: '{devModePath}', exists: {!string.IsNullOrEmpty(devModePath) && Directory.Exists(devModePath)}");
                 LogDebug($"Package Mode Path: '{packageModePath}', exists: {!string.IsNullOrEmpty(packageModePath) && Directory.Exists(packageModePath)}");
                 LogDebug($"Cache Path: '{cachePath}', exists: {!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath)}");
@@ -94,7 +93,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // If we found a valid path, store it as a fallback for future use
             if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
             {
-                LogDebug($"Using path: {resolvedPath}", true);
+                LogDebug($"Using path: {resolvedPath}", false);
                 EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
                 return resolvedPath;
             }
@@ -104,7 +103,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
 
             if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
             {
-                LogDebug($"Using alternative path: {resolvedPath}", true);
+                LogDebug($"Using alternative path: {resolvedPath}", false);
                 EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
                 return resolvedPath;
             }
@@ -112,7 +111,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Try package cache path
             if (!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath))
             {
-                LogDebug($"Using package cache path: {cachePath}", true);
+                LogDebug($"Using package cache path: {cachePath}", false);
                 EditorPrefs.SetString(LastResolvedPathKey, cachePath);
                 return cachePath;
             }
@@ -120,12 +119,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Last resort: try to use the cached path from a previous successful resolution
             if (!string.IsNullOrEmpty(lastKnownPath) && Directory.Exists(lastKnownPath))
             {
-                LogDebug($"Using last known working path: {lastKnownPath}", true);
+                LogDebug($"Using last known working path: {lastKnownPath}", false);
                 return lastKnownPath;
             }
             
             // If all else fails, dump diagnostic info
-            LogDebug("Failed to resolve package path", true);
+            LogDebug("Failed to resolve package path - no valid paths found", false);
             DumpDiagnosticInfo();
             return string.Empty;
         }
@@ -167,11 +166,11 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 
                 sb.AppendLine("=== END DIAGNOSTIC INFO ===");
                 // Always log diagnostic info when something fails
-                LogDebug(sb.ToString(), true);
+                LogDebug(sb.ToString(), false);
             }
             catch (Exception ex)
             {
-                LogDebug($"Error during diagnostics: {ex.Message}", true);
+                LogDebug($"Error during diagnostics: {ex.Message}", false);
             }
         }
         
@@ -195,7 +194,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             }
             catch (Exception ex)
             {
-                LogDebug($"Error in TryGetDeveloperModePath: {ex.Message}", true);
+                LogDebug($"Error in TryGetDeveloperModePath: {ex.Message}", false);
             }
             return string.Empty;
         }
@@ -252,9 +251,9 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                         {
                             if (pkg.name.Contains(packageName))
                             {
-                                LogDebug($"Found matching package via list: {pkg.name} at {pkg.resolvedPath}", true);
                                 if (!string.IsNullOrEmpty(pkg.resolvedPath) && Directory.Exists(pkg.resolvedPath))
                                 {
+                                    LogDebug($"Found matching package via list: {pkg.name} at {pkg.resolvedPath}", false);
                                     return pkg.resolvedPath;
                                 }
                                 else
@@ -269,12 +268,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 }
                 else
                 {
-                    LogDebug($"Package list request failed with status: {listRequest.Status}, Error: {listRequest.Error?.message}", true);
+                    LogDebug($"Package list request failed with status: {listRequest.Status}, Error: {listRequest.Error?.message}", false);
                 }
             }
             catch (Exception ex)
             {
-                LogDebug($"Error in TryGetPackageModePath: {ex.Message}, StackTrace: {ex.StackTrace}", true);
+                LogDebug($"Error in TryGetPackageModePath: {ex.Message}, StackTrace: {ex.StackTrace}", false);
             }
             
             return string.Empty;
@@ -290,7 +289,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                 
                 if (!Directory.Exists(packageCachePath))
                 {
-                    LogDebug($"Package cache directory not found: {packageCachePath}", true);
+                    LogDebug($"Package cache directory not found: {packageCachePath}", false);
                     return string.Empty;
                 }
                 
@@ -324,13 +323,13 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
                     // Sort by creation time to get most recent
                     packageDirs.Sort((a, b) => Directory.GetCreationTime(b).CompareTo(Directory.GetCreationTime(a)));
                     string mostRecentPackageDir = packageDirs[0];
-                    LogDebug($"Selected most recent package in cache: {mostRecentPackageDir}", true);
+                    LogDebug($"Selected most recent package in cache: {mostRecentPackageDir}", false);
                     return mostRecentPackageDir;
                 }
             }
             catch (Exception ex)
             {
-                LogDebug($"Error in FindPackageInPackageCache: {ex.Message}", true);
+                LogDebug($"Error in FindPackageInPackageCache: {ex.Message}", false);
             }
             
             return string.Empty;
