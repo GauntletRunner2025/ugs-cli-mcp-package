@@ -3,8 +3,6 @@ using System;
 using UnityEngine;
 using UnityEditor;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public class InstallationStepManager
     {
         private readonly VisualElement rootElement;
@@ -89,4 +87,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         public int CurrentStepIndex => currentStep;
         public int TotalSteps => steps.Length;
     }
-}

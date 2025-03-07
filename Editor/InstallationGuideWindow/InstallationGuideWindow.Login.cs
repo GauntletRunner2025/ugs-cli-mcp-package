@@ -6,8 +6,6 @@ using UnityEditor;
 using Debug = UnityEngine.Debug;
 using UnityEngine.UIElements;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public partial class InstallationGuideWindow
     {
         private void CheckLoginStatus()
@@ -118,4 +116,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
         }
 
     }
-}

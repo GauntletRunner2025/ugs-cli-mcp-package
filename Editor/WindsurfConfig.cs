@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     [Serializable]
     internal class WindsurfConfig
     {
@@ -15,4 +13,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
 
         public Dictionary<string, McpServer> mcpServers;
     }
-}

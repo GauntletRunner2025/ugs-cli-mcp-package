@@ -5,13 +5,9 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using Debug = UnityEngine.Debug;
-using Gauntletrunner2025.UgsCliMcp.Editor.Models;
-using Gauntletrunner2025.UgsCliMcp.Editor.Utilities;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public partial class InstallationGuideWindow
     {
         private Button checkMcpConfigButton;
@@ -162,4 +158,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
         }
     }
-}

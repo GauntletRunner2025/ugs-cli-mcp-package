@@ -7,8 +7,6 @@ using System.Text;
 using Debug = UnityEngine.Debug;
 using System.Collections.Generic;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public partial class InstallationGuideWindow
     {
         private Button setProjectIdButton;
@@ -513,4 +511,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
         }
     }
-}

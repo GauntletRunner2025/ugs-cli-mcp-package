@@ -4,8 +4,6 @@ using System;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public class UgsCliUtility
     {
         public class VersionCheckResult
@@ -229,4 +227,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
         }
     }
-}

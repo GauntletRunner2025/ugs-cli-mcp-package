@@ -1,9 +1,6 @@
-using Gauntletrunner2025.UgsCliMcp.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public static class InstallationGuideInitializer
     {
         private const float WindowWidth = 620;
@@ -37,4 +34,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             window.maxSize = window.minSize;
         }
     }
-}

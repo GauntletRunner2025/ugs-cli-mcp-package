@@ -4,8 +4,6 @@ using UnityEditor;
 using System;
 using System.Diagnostics;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public partial class InstallationGuideWindow : BaseInstallationWindow
     {
         private Button previousButton;
@@ -128,4 +126,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             }
         }
     }
-}

@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor
-{
     public partial class InstallationGuideWindow
     {
         private void CheckUgsVersion()
@@ -46,4 +44,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             simulateNotInstalledButton.style.display = DisplayStyle.None;
         }
     }
-}
