@@ -22,10 +22,66 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                 return string.Empty;
             }
             
-            string fullPath = Path.Combine(packagePath, UiPath, fileName);
-            Debug.LogError($"[MCP DEBUG] Full asset path: {fullPath}");
-            
-            return fullPath;
+            // Determine if the path is in a package cache with a hash
+            if (packagePath.Contains("PackageCache"))
+            {
+                // For package cache paths, we need to convert to a package: path format that Unity understands
+                string projectPath = Path.GetDirectoryName(Application.dataPath);
+                
+                // Extract the package name from the cache folder name (potentially with @hash)
+                string cacheFolder = Path.GetFileName(packagePath);
+                string packageName = cacheFolder;
+                
+                // If it has a hash (contains @), extract just the package name part
+                if (cacheFolder.Contains("@"))
+                {
+                    packageName = cacheFolder.Substring(0, cacheFolder.IndexOf('@'));
+                }
+                
+                Debug.LogError($"[MCP DEBUG] Detected package cache. Package name: {packageName}");
+                
+                // Create a package: relative path which Unity's AssetDatabase can understand
+                string packageRelativePath = $"Packages/{packageName}/{UiPath}/{fileName}";
+                Debug.LogError($"[MCP DEBUG] Package-relative path: {packageRelativePath}");
+                return packageRelativePath;
+            }
+            else if (packagePath.StartsWith(Application.dataPath))
+            {
+                // If it's in the Assets folder, make it project-relative
+                string projectPath = Path.GetDirectoryName(Application.dataPath);
+                string projectRelativePath = packagePath.Substring(projectPath.Length + 1);
+                string assetPath = Path.Combine(projectRelativePath, UiPath, fileName);
+                
+                // Replace backslashes with forward slashes (Unity preference)
+                assetPath = assetPath.Replace('\\', '/');
+                
+                Debug.LogError($"[MCP DEBUG] Assets-relative path: {assetPath}");
+                return assetPath;
+            }
+            else
+            {
+                // For absolute paths, try to make them relative to the project
+                string projectPath = Path.GetDirectoryName(Application.dataPath);
+                
+                // Try to construct project-relative path
+                string fullPath = Path.Combine(packagePath, UiPath, fileName);
+                
+                if (fullPath.StartsWith(projectPath))
+                {
+                    string relativePath = fullPath.Substring(projectPath.Length + 1);
+                    // Replace backslashes with forward slashes (Unity preference)
+                    relativePath = relativePath.Replace('\\', '/');
+                    Debug.LogError($"[MCP DEBUG] Project-relative path: {relativePath}");
+                    return relativePath;
+                }
+                else
+                {
+                    // If it's outside the project, we'll try a direct approach by checking if the file exists
+                    // This should generally be avoided but might help during debugging
+                    Debug.LogError($"[MCP DEBUG] Warning: Path is outside project. Full path: {fullPath}");
+                    return fullPath;
+                }
+            }
         }
 
         protected static string GetUxmlPath()
@@ -58,11 +114,36 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
             {
                 Debug.LogError($"[MCP DEBUG] Could not find UXML at path: {uxmlPath}");
                 
-                // Try alternative approach to load the asset directly
-                if (File.Exists(uxmlPath))
+                // Check if this is a path issue by checking if the file physically exists
+                if (uxmlPath.StartsWith("Packages/") || uxmlPath.StartsWith("Assets/"))
                 {
-                    Debug.LogError($"[MCP DEBUG] File exists at {uxmlPath} but AssetDatabase could not load it");
+                    // The path looks correct for AssetDatabase, file might not exist
+                    Debug.LogError($"[MCP DEBUG] Path is in the correct format for AssetDatabase, but asset couldn't be found");
+                }
+                else if (File.Exists(uxmlPath))
+                {
+                    Debug.LogError($"[MCP DEBUG] File exists at {uxmlPath} but AssetDatabase path format is incorrect");
                     
+                    // Attempt to find the package in the asset database
+                    var guids = AssetDatabase.FindAssets("InstallationGuideWindow t:VisualTreeAsset");
+                    if (guids.Length > 0)
+                    {
+                        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                        Debug.LogError($"[MCP DEBUG] Found UXML via GUID search at: {path}");
+                        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
+                    }
+                    else
+                    {
+                        Debug.LogError("[MCP DEBUG] Could not find UXML via GUID search");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"[MCP DEBUG] File does not exist at path: {uxmlPath}");
+                }
+                
+                if (visualTree == null)
+                {
                     // Try refreshing the asset database
                     AssetDatabase.Refresh();
                     visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
@@ -72,11 +153,6 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                         Debug.LogError("[MCP DEBUG] Still could not load UXML after refreshing AssetDatabase");
                         return;
                     }
-                }
-                else
-                {
-                    Debug.LogError($"[MCP DEBUG] File does not exist at path: {uxmlPath}");
-                    return;
                 }
             }
 
