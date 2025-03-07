@@ -23,7 +23,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
         
         static PackagePathUtility()
         {
-            LogDebug("PackagePathUtility initialized", true);
+            LogDebug("PackagePathUtility initialized");
         }
         
         /// <summary>
@@ -62,7 +62,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             {
                 // Use different prefixes based on importance
                 string prefix = alwaysLog ? "[MCP]" : "[MCP DEBUG]";
-                Debug.LogError($"{prefix} {message}");
+                Debug.Log($"{prefix} {message}");
             }
         }
 
@@ -71,19 +71,22 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             LogDebug("=== GetPackagePath() CALLED ===");
             
             var isDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
-            LogDebug($"Developer Mode: {isDeveloperMode}");
             
-            // Find all possible paths and log them before deciding
-            LogDebug("Examining all possible paths:");
+            // Find all possible paths
             string devModePath = TryGetDeveloperModePath();
             string packageModePath = TryGetPackageModePath();
             string cachePath = FindPackageInPackageCache();
             string lastKnownPath = EditorPrefs.GetString(LastResolvedPathKey, string.Empty);
             
-            LogDebug($"Developer Mode Path: '{devModePath}', exists: {!string.IsNullOrEmpty(devModePath) && Directory.Exists(devModePath)}");
-            LogDebug($"Package Mode Path: '{packageModePath}', exists: {!string.IsNullOrEmpty(packageModePath) && Directory.Exists(packageModePath)}");
-            LogDebug($"Cache Path: '{cachePath}', exists: {!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath)}");
-            LogDebug($"Last Known Path: '{lastKnownPath}', exists: {!string.IsNullOrEmpty(lastKnownPath) && Directory.Exists(lastKnownPath)}");
+            // Only log paths in verbose mode
+            if (VerboseLogging)
+            {
+                LogDebug($"Developer Mode: {isDeveloperMode}");
+                LogDebug($"Developer Mode Path: '{devModePath}', exists: {!string.IsNullOrEmpty(devModePath) && Directory.Exists(devModePath)}");
+                LogDebug($"Package Mode Path: '{packageModePath}', exists: {!string.IsNullOrEmpty(packageModePath) && Directory.Exists(packageModePath)}");
+                LogDebug($"Cache Path: '{cachePath}', exists: {!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath)}");
+                LogDebug($"Last Known Path: '{lastKnownPath}', exists: {!string.IsNullOrEmpty(lastKnownPath) && Directory.Exists(lastKnownPath)}");
+            }
             
             // Try to get the path using the appropriate method based on mode
             string resolvedPath = isDeveloperMode ? devModePath : packageModePath;
@@ -91,18 +94,17 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // If we found a valid path, store it as a fallback for future use
             if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
             {
-                LogDebug($"✓ Using primary path: {resolvedPath}", true);
+                LogDebug($"Using path: {resolvedPath}", true);
                 EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
                 return resolvedPath;
             }
             
             // If the appropriate method failed, try the alternative method
-            LogDebug("Primary path resolution failed. Trying alternative method.");
             resolvedPath = isDeveloperMode ? packageModePath : devModePath;
 
             if (!string.IsNullOrEmpty(resolvedPath) && Directory.Exists(resolvedPath))
             {
-                LogDebug($"✓ Using alternative path: {resolvedPath}", true);
+                LogDebug($"Using alternative path: {resolvedPath}", true);
                 EditorPrefs.SetString(LastResolvedPathKey, resolvedPath);
                 return resolvedPath;
             }
@@ -110,7 +112,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Try package cache path
             if (!string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath))
             {
-                LogDebug($"✓ Using package cache path: {cachePath}", true);
+                LogDebug($"Using package cache path: {cachePath}", true);
                 EditorPrefs.SetString(LastResolvedPathKey, cachePath);
                 return cachePath;
             }
@@ -118,12 +120,12 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             // Last resort: try to use the cached path from a previous successful resolution
             if (!string.IsNullOrEmpty(lastKnownPath) && Directory.Exists(lastKnownPath))
             {
-                LogDebug($"✓ Using last known working path: {lastKnownPath}", true);
+                LogDebug($"Using last known working path: {lastKnownPath}", true);
                 return lastKnownPath;
             }
             
             // If all else fails, dump diagnostic info
-            LogDebug("!!! FAILED TO RESOLVE PACKAGE PATH !!!", true);
+            LogDebug("Failed to resolve package path", true);
             DumpDiagnosticInfo();
             return string.Empty;
         }
