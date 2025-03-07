@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System;
 using System.Text;
+using System.Diagnostics;
 
 public static class PackagePathUtility
 {
@@ -41,6 +42,7 @@ public static class PackagePathUtility
         {
             string header = $"=== MCP Debug Log ===\n" +
                           $"Project Path: {Path.GetDirectoryName(Application.dataPath)}\n" +
+                          $"Package Cache: {Path.Combine(Path.GetDirectoryName(Application.dataPath), "Library", "PackageCache")}\n" +
                           $"Developer Mode: {EditorPrefs.GetBool(DeveloperModeKey, false)}\n" +
                           $"Verbose Logging: {VerboseLogging}\n" +
                           $"Unity Version: {Application.unityVersion}\n" +
@@ -96,15 +98,12 @@ public static class PackagePathUtility
             // Also write to file with calling method name
             try 
             {
-                string stackTrace = Environment.StackTrace;
-                string callingMethod = stackTrace.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Skip(2) // Skip GetStackTrace and LogDebug
-                    .FirstOrDefault()?
-                    .Trim()
-                    .Split(new[] { '(', ' ' }, StringSplitOptions.RemoveEmptyEntries) // Split on space or opening parenthesis
-                    .LastOrDefault() ?? "Unknown"; // Take the last part which should be just the method name
-                    
-                string fileMessage = $"({callingMethod}) {logMessage}\n";
+                var frame = new StackFrame(1, true);
+                string fileName = Path.GetFileName(frame.GetFileName() ?? "Unknown");
+                int lineNumber = frame.GetFileLineNumber();
+                string methodName = frame.GetMethod()?.Name ?? "Unknown";
+                
+                string fileMessage = $"({fileName}:{lineNumber} in {methodName}) {logMessage}\n";
                 File.AppendAllText(LogFilePath, fileMessage);
             }
             catch (Exception ex)
