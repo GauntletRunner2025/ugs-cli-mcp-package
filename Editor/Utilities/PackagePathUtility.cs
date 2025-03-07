@@ -18,9 +18,40 @@ public static class PackagePathUtility
     private const string DeveloperModeKey = "MCPDeveloperMode";
     private const string LastResolvedPathKey = "MCPLastResolvedPath";
     private const string VerboseModeKey = "MCPVerboseLogging";
+    private static string LogFilePath 
+    {
+        get 
+        {
+            // Get project root directory
+            string projectPath = Path.GetDirectoryName(Application.dataPath);
+            return Path.Combine(projectPath, "mcp_debug.log");
+        }
+    }
     
     static PackagePathUtility()
     {
+        // Clear out the log file on initialization
+        if (File.Exists(LogFilePath))
+        {
+            File.Delete(LogFilePath);
+        }
+        
+        // Create a header in the log file
+        try
+        {
+            string header = $"=== MCP Debug Log Started at {DateTime.Now:yyyy-MM-dd HH:mm:ss} ===\n" +
+                          $"Project Path: {Path.GetDirectoryName(Application.dataPath)}\n" +
+                          $"Developer Mode: {EditorPrefs.GetBool(DeveloperModeKey, false)}\n" +
+                          $"Verbose Logging: {VerboseLogging}\n" +
+                          $"Unity Version: {Application.unityVersion}\n" +
+                          "========================================\n\n";
+            File.WriteAllText(LogFilePath, header);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to create log file header: {ex.Message}");
+        }
+        
         LogDebug("PackagePathUtility initialized", false);
     }
     
@@ -59,7 +90,26 @@ public static class PackagePathUtility
         if (!verboseOnly || VerboseLogging)
         {
             string prefix = verboseOnly ? "[MCP DEBUG]" : "[MCP]";
-            Debug.Log($"{prefix} {message}");
+            string logMessage = $"{prefix} {message}";
+            Debug.Log(logMessage);
+            
+            // Also write to file with timestamp
+            try 
+            {
+                string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                // Include stack trace in file but not in console
+                string stackTrace = Environment.StackTrace;
+                string callingMethod = stackTrace.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Skip(2) // Skip GetStackTrace and LogDebug
+                    .FirstOrDefault()?.Trim() ?? "Unknown";
+                    
+                string fileMessage = $"[{timestamp}] ({callingMethod}) {logMessage}\n";
+                File.AppendAllText(LogFilePath, fileMessage);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to write to log file at {LogFilePath}: {ex.Message}");
+            }
         }
     }
 
