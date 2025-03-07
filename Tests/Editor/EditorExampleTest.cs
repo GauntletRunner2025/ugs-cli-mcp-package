@@ -4,8 +4,6 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
-namespace GauntletRunner2025.UgsCliMcp.Editor.Tests 
-{
 	
 	class EditorExampleTest 
 	{
@@ -26,4 +24,3 @@ namespace GauntletRunner2025.UgsCliMcp.Editor.Tests
 			yield return null;
 		}
 	}
-}
