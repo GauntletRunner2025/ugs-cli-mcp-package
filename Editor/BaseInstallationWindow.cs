@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.IO;
-using Gauntletrunner2025.UgsCliMcp.Editor.Utilities;
+using GauntletRunner2025.UgsCliMcp.Editor.Utilities;
 
 namespace GauntletRunner2025.UgsCliMcp.Editor
 {
@@ -10,7 +10,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
     {
         private const string UiPath = "Editor/UI";
 
-        // Ensure LogDebug function is accessible
+        // Local wrapper for logging
         private static void LogDebug(string message, bool verboseOnly = true)
         {
             PackagePathUtility.LogDebug(message, verboseOnly);
@@ -136,6 +136,7 @@ namespace GauntletRunner2025.UgsCliMcp.Editor
                     {
                         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
                         LogDebug($"Found UXML via GUID search at: {path}", false);
+                        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
                     }
                     else
                     {

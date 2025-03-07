@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor
+namespace GauntletRunner2025.UgsCliMcp.Editor
 {
     [Serializable]
     internal class WindsurfConfig

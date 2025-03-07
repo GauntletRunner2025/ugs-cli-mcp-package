@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor.Models
+namespace GauntletRunner2025.UgsCliMcp.Editor.Models
 {
     public class McpServerConfig
     {

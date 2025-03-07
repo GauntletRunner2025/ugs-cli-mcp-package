@@ -3,7 +3,7 @@ using UnityEditor;
 using System;
 using System.IO;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
+namespace GauntletRunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class McpConfigBackupUtility
     {

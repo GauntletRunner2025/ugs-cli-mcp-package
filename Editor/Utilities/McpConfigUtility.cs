@@ -2,10 +2,10 @@ using UnityEngine;
 using System;
 using System.IO;
 using Newtonsoft.Json;
-using Gauntletrunner2025.UgsCliMcp.Editor.Models;
+using GauntletRunner2025.UgsCliMcp.Editor.Models;
 using UnityEditor;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
+namespace GauntletRunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class McpConfigUtility
     {

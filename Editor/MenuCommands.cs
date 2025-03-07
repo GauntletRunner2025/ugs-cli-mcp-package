@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using GauntletRunner2025.UgsCliMcp.Editor;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor
+namespace GauntletRunner2025.UgsCliMcp.Editor
 {
     public static class MenuCommands
     {

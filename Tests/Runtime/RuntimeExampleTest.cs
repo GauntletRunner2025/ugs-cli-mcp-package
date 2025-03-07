@@ -3,7 +3,7 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
-namespace Gauntletrunner2025.UgsCliMcp.Tests 
+namespace GauntletRunner2025.UgsCliMcp.Tests 
 {
 	
 	class RuntimeExampleTest 

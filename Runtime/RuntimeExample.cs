@@ -4,7 +4,7 @@
 //
 // -----------------------------------------------------------------------------
 
-namespace Gauntletrunner2025.UgsCliMcp
+namespace GauntletRunner2025.UgsCliMcp
 {
     /// <summary>
     /// Provide a general description of the public class.

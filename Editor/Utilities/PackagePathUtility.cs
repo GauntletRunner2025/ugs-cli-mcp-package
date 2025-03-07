@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 using System.Text;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
+namespace GauntletRunner2025.UgsCliMcp.Editor.Utilities
 {
     public static class PackagePathUtility
     {
@@ -55,7 +55,7 @@ namespace Gauntletrunner2025.UgsCliMcp.Editor.Utilities
             set => EditorPrefs.SetBool(VerboseModeKey, value);
         }
         
-        private static void LogDebug(string message, bool verboseOnly = true)
+        public static void LogDebug(string message, bool verboseOnly = true)
         {
             // Only log if this is not a verbose-only message, or if verbose mode is on
             if (!verboseOnly || VerboseLogging)

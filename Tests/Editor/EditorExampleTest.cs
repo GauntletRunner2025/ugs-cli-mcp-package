@@ -4,7 +4,7 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
-namespace Gauntletrunner2025.UgsCliMcp.Editor.Tests 
+namespace GauntletRunner2025.UgsCliMcp.Editor.Tests 
 {
 	
 	class EditorExampleTest 
