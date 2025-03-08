@@ -127,12 +127,12 @@ async function main() {
   // registerCreateCustomIndex(server);
 
   // //Player management
-  // registerCreatePlayer(server);
-  // registerDeletePlayer(server);
-  // registerDisablePlayer(server);
-  // registerEnablePlayer(server);
-  // registerGetPlayer(server);
-  // registerListPlayer(server);
+  registerCreatePlayer(server);
+  registerDeletePlayer(server);
+  registerDisablePlayer(server);
+  registerEnablePlayer(server);
+  registerGetPlayer(server);
+  registerListPlayer(server);
 
   // //???
   // registerFetch(server);

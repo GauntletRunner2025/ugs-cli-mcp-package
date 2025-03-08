@@ -1,11 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerGetVersionHandler } from "./tools/get-version.js";
+import { registerCreatePlayer } from "./tools/player/create-player.js";
+import { registerDeletePlayer } from "./tools/player/delete-player.js";
+import { registerDisablePlayer } from "./tools/player/disable-player.js";
+import { registerEnablePlayer } from "./tools/player/enable-player.js";
+import { registerGetPlayer } from "./tools/player/get-player.js";
+import { registerListPlayer } from "./tools/player/list-player.js";
 //Configuration
 import { registerDeleteConfig } from "./tools/configuration/delete-config.js";
 import { registerGetConfig } from "./tools/configuration/get-config.js";
 import { registerSetConfig } from "./tools/configuration/set-config.js";
-import { registerDeploy } from "./tools/deploy.js";
 async function main() {
     const server = new McpServer({
         name: "weather",
@@ -18,17 +23,17 @@ async function main() {
     registerGetConfig(server);
     registerSetConfig(server);
     //Deploy
-    registerDeploy(server);
+    // registerDeploy(server);
     // //Cloud save
     // registerListCustomDataIDs(server);
     // registerCreateCustomIndex(server);
     // //Player management
-    // registerCreatePlayer(server);
-    // registerDeletePlayer(server);
-    // registerDisablePlayer(server);
-    // registerEnablePlayer(server);
-    // registerGetPlayer(server);
-    // registerListPlayer(server);
+    registerCreatePlayer(server);
+    registerDeletePlayer(server);
+    registerDisablePlayer(server);
+    registerEnablePlayer(server);
+    registerGetPlayer(server);
+    registerListPlayer(server);
     // //???
     // registerFetch(server);
     // registerLogin(server);
