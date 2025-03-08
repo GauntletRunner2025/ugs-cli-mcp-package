@@ -47,8 +47,8 @@ using UnityEditor;
             // Show current step
             rootElement.Q<VisualElement>(steps[currentStep]).style.display = DisplayStyle.Flex;
 
-            // Auto-complete final step since it's just instructions
-            if (currentStep == steps.Length - 1)
+            // Auto-complete final instruction steps since they're just informational
+            if (currentStep == steps.Length - 1 || currentStep == steps.Length - 2)
             {
                 stepCompleted[currentStep] = true;
             }
