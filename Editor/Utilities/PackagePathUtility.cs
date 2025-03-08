@@ -210,6 +210,30 @@ public static class PackagePathUtility
         return string.Empty;
     }
 
+    private static bool VerboseLogging => EditorPrefs.GetBool(VerboseModeKey, false);
+
+    public static void LogDebug(string message, bool onlyInVerbose = true)
+    {
+        if (onlyInVerbose && !VerboseLogging)
+            return;
+
+        try 
+        {
+            string logMessage = $" {message}";
+            
+            File.AppendAllText(LogFilePath, logMessage + "\n");
+            
+            if (!onlyInVerbose || VerboseLogging)
+            {
+                Debug.Log($"[MCP] {message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to write to MCP debug log: {ex.Message}");
+        }
+    }
+
     public static void ClearPackagePathCache()
     {
         LogDebug("clearing cache", true);
