@@ -73,6 +73,22 @@
                 <engine:Label text="To test it's working, try asking Cascade:" style="margin-bottom: 10px; white-space: normal;" />
                 <engine:Label text="'What version of UGS CLI is installed?'" style="margin-bottom: 20px; white-space: normal; -unity-font-style: italic;" />
                 <engine:Label text="The agent should respond with the version number we verified in Step 1." style="margin-bottom: 10px; white-space: normal;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="step-7" style="flex-grow: 1; display: none;">
+                <engine:Label text="Step 7: Required Permissions" class="header" style="margin-bottom: 10px;" />
+                <engine:Label text="Important: You need to configure permissions in the Unity Dashboard for this project." style="margin-bottom: 10px; white-space: normal;" />
+                <engine:Label text="Go to the Unity Dashboard > Admin section and add the following permissions:" style="margin-bottom: 20px; white-space: normal;" />
+                <engine:VisualElement style="flex-direction: row; margin-bottom: 10px;">
+                    <engine:VisualElement style="width: 50%;">
+                        <engine:Label text="Command" style="-unity-font-style: bold; margin-bottom: 5px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="width: 50%;">
+                        <engine:Label text="Required Permissions" style="-unity-font-style: bold; margin-bottom: 5px;" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <engine:ScrollView style="flex-grow: 1; margin-bottom: 20px;">
+                    <engine:Label name="permissions-list" style="white-space: normal;" />
+                </engine:ScrollView>
                 <engine:Button text="Done" name="done-button" style="margin-top: 20px;" />
             </engine:VisualElement>
         </engine:VisualElement>

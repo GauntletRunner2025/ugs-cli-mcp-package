@@ -2,7 +2,6 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { validateProjectId } from "../../utils/project-validation.js";
 
 const execAsync = promisify(exec);
 
@@ -10,16 +9,6 @@ const execAsync = promisify(exec);
 let lastError: any = null;
 
 export function registerListCustomDataIDs(server: McpServer) {
-
-server.tool(
-    "get-error-details",
-    "Get the detailed error response from the last failed command",
-    async () => {
-        return {
-            content: [{ type: "text", text: lastError ? JSON.stringify(lastError, null, 2) : "No error stored" }]
-        };
-    }
-);
 
 server.tool(
     "list-custom-data-ids",
@@ -34,15 +23,6 @@ server.tool(
         lastError = null;
         
         try {
-            const validation = await validateProjectId();
-            if (!validation.isValid) {
-                lastError = validation.error;
-                console.error("[Error]:", validation.error);
-                return {
-                    content: [{ type: "text", text: `[Error]: ${validation.error}` }]
-                };
-            }
-
             const ugsCommand = ['ugs', 'cloud-save', 'data', 'custom', 'list'];
 
             if (limit) {

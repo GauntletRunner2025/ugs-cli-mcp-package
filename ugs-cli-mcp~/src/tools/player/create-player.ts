@@ -13,17 +13,35 @@ export function registerCreatePlayer(server: McpServer) {
         "Create an anonymous player account",
         async () => {
             try {
-                console.log("Creating Player...");
-                const { stdout, stderr } = await execAsync('ugs player create');
-                
+                const { stdout, stderr } = await execAsync('ugs player create --json');
+
                 // Add a delay of 1 second before processing the output
-                await sleep(1000);
-                
-                return {
-                    content: [{ type: "text", text: stdout.trim() || `Error: ${stderr}` }]
-                };
+                await sleep(2000);
+
+                if (stderr) {
+                    console.error('Error output:', stderr);
+                }
+
+                // Split the output into lines and skip the first 'null' line
+                const lines = stdout.split('\n').filter(line => line.trim() !== 'null');
+                const jsonText = lines.join('\n').trim();
+
+                try {
+                    const jsonOutput = JSON.parse(jsonText);
+                    console.log('Parsed output:', jsonOutput);
+                    return {
+                        content: [{ type: "text", text: JSON.stringify(jsonOutput, null, 2) }]
+                    };
+                } catch (parseError) {
+                    // If JSON parsing fails, return the full output except the null line
+                    console.log('Raw output:', jsonText);
+                    return {
+                        content: [{ type: "text", text: jsonText }]
+                    };
+                }
 
             } catch (error: any) {
+                console.error('Execution error:', error);
                 return {
                     content: [{ type: "text", text: `Error: ${error?.message || String(error)}` }]
                 };

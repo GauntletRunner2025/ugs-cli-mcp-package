@@ -107,8 +107,8 @@ import { registerDeploy } from "./tools/deploy.js";
 
 async function main() {
   const server = new McpServer({
-    name: "weather",
-    version: "1.0.0",
+    name: "ugs-cli-mcp",
+    version: "0.1.0",
   });
 
   // Register all tools

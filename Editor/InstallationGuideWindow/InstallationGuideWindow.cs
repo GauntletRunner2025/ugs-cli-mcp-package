@@ -53,6 +53,7 @@ using Debug = UnityEngine.Debug;
         private Label npmVersionResultLabel;
         private Label installProgressLabel;
         private Label loginStatusResultLabel;
+        private Label permissionsList;
         private VisualElement npmCheckContainer;
         private VisualElement loginContainer;
         private InstallationStepManager stepManager;
@@ -83,6 +84,7 @@ using Debug = UnityEngine.Debug;
             npmVersionResultLabel = rootVisualElement.Q<Label>("npm-version-result");
             installProgressLabel = rootVisualElement.Q<Label>("install-progress");
             loginStatusResultLabel = rootVisualElement.Q<Label>("login-status-result");
+            permissionsList = rootVisualElement.Q<Label>("permissions-list");
             npmCheckContainer = rootVisualElement.Q<VisualElement>("npm-check-container");
             loginContainer = rootVisualElement.Q<VisualElement>("login-container");
 
@@ -109,8 +111,28 @@ using Debug = UnityEngine.Debug;
             // Setup MCP config UI
             SetupMcpConfigUI();
 
+            // Setup permissions list
+            SetupPermissionsList();
+
             // Show first step
             stepManager.NavigateStep(0);
+        }
+
+        private void SetupPermissionsList()
+        {
+            if (permissionsList != null)
+            {
+                var permissions = new System.Text.StringBuilder();
+                permissions.AppendLine("Player module\t\t");
+                permissions.AppendLine("\t\tAuthentication Admin");
+                permissions.AppendLine("\t\tAuthentication Editor");
+
+                permissions.AppendLine("delete-player\t\tDelete existing players");
+                permissions.AppendLine("enable-player\t\tEnable/disable players");
+                permissions.AppendLine("get-player\t\tView player information");
+                permissions.AppendLine("list-player\t\tList all players");
+                permissionsList.text = permissions.ToString();
+            }
         }
 
         private void OnStepChanged(int stepIndex)
@@ -119,6 +141,12 @@ using Debug = UnityEngine.Debug;
             nextButton.text = isLastStep ? "Done" : "Next";
             nextButton.style.display = isLastStep ? DisplayStyle.None : DisplayStyle.Flex;
             doneButton.style.display = isLastStep ? DisplayStyle.Flex : DisplayStyle.None;
+
+            // Auto-complete the permissions step since it's just informational
+            if (stepIndex == 6) // Permissions step
+            {
+                stepManager.SetStepCompletion(true);
+            }
         }
 
         private void OnDoneButtonClicked()
