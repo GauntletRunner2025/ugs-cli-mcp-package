@@ -14,7 +14,7 @@ public abstract class BaseInstallationWindow : EditorWindow
 
     private static string GetAssetPath(string fileName)
     {
-        LogDebug($"called for {fileName}", false);
+        LogDebug($"called for {fileName}", true);
         string packagePath = PackagePathUtility.GetPackagePath();
         
         if (string.IsNullOrEmpty(packagePath))
@@ -34,9 +34,9 @@ public abstract class BaseInstallationWindow : EditorWindow
                 packageName = cacheFolder.Substring(0, cacheFolder.IndexOf('@'));
             }
             
-            LogDebug($"Detected package cache. Package name: {packageName}", false);
+            LogDebug($"Detected package cache. Package name: {packageName}", true);
             string packageRelativePath = $"Packages/{packageName}/{UiPath}/{fileName}";
-            LogDebug($"Package-relative path: {packageRelativePath}", false);
+            LogDebug($"Package-relative path: {packageRelativePath}", true);
             return packageRelativePath;
         }
         else if (packagePath.StartsWith(Application.dataPath))
@@ -76,10 +76,10 @@ public abstract class BaseInstallationWindow : EditorWindow
 
     protected virtual void CreateGUI()
     {
-        LogDebug("called", false);
+        LogDebug("called", true);
         
         string uxmlPath = GetUxmlPath();
-        LogDebug($"UXML Path: {uxmlPath}", false);
+        LogDebug($"UXML Path: {uxmlPath}", true);
         
         if (string.IsNullOrEmpty(uxmlPath))
         {

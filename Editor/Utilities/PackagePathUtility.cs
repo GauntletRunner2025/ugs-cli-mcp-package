@@ -55,7 +55,7 @@ public static class PackagePathUtility
             Debug.LogError($"Failed to create log file header: {ex.Message}");
         }
         
-        LogDebug("initialized", false);
+        LogDebug("initialized", true);
         wasDeveloperMode = EditorPrefs.GetBool(DeveloperModeKey, false);
     }
 
@@ -102,7 +102,7 @@ public static class PackagePathUtility
 
         if (!string.IsNullOrEmpty(path))
         {
-            LogDebug($"using path: {path}", false);
+            LogDebug($"using path: {path}", true);
             EditorPrefs.SetString(LastResolvedPathKey, path);
             cachedPackagePath = path;
             isPackagePathCached = true;
