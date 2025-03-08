@@ -12,13 +12,13 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // Helper function to write to log file
 const writeToLog = async (data: any) => {
     try {
-        // Use absolute path to ensure logs directory is created in the right place
-        const logDir = path.resolve(process.cwd(), 'logs');
-        const logFile = path.join(logDir, 'create-player.log');
+        // Use hardcoded path as specified
+        const logFile = 'C:\\gauntletai\\MCP-Example\\log.txt';
 
         console.log(`Writing logs to: ${logFile}`);
 
-        // Ensure log directory exists
+        // Ensure parent directory exists
+        const logDir = path.dirname(logFile);
         if (!fs.existsSync(logDir)) {
             console.log(`Creating log directory: ${logDir}`);
             fs.mkdirSync(logDir, { recursive: true });
@@ -46,11 +46,13 @@ export function registerCreatePlayer(server: McpServer) {
                 console.log('Executing UGS player create command');
                 const { stdout, stderr } = await execAsync('ugs player create --json');
 
+                // Write raw command output to log immediately
+                await writeToLog({ rawOutput: stdout, stderr: stderr || null });
+                
                 console.log('Command executed, raw stdout:', stdout);
 
-                // Add a delay of 1 second before processing the output
-                await sleep(1000);
-
+                // No need for sleep delay anymore
+                
                 if (stderr) {
                     console.error('Error output from command:', stderr);
                 }
@@ -65,11 +67,8 @@ export function registerCreatePlayer(server: McpServer) {
                     const jsonOutput = JSON.parse(jsonText);
                     console.log('Successfully parsed JSON output');
                     
-                    // Try to write to log and capture success/failure
-                    const logSuccess = await writeToLog(jsonOutput);
-                    if (!logSuccess) {
-                        console.warn('Failed to write to log file, but continuing execution');
-                    }
+                    // Log the parsed JSON output
+                    await writeToLog({ parsedOutput: jsonOutput });
                     
                     return {
                         content: [{ 
@@ -90,6 +89,9 @@ export function registerCreatePlayer(server: McpServer) {
 
             } catch (error: any) {
                 console.error('Execution error:', error);
+                // Log the error
+                await writeToLog({ error: error?.message || String(error) });
+                
                 return {
                     content: [{ 
                         type: "text", 
