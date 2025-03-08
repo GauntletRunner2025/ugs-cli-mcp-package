@@ -142,11 +142,11 @@ using Debug = UnityEngine.Debug;
             nextButton.style.display = isLastStep ? DisplayStyle.None : DisplayStyle.Flex;
             doneButton.style.display = isLastStep ? DisplayStyle.Flex : DisplayStyle.None;
 
-            // Auto-complete the permissions step since it's just informational
-            if (stepIndex == 6) // Permissions step
-            {
-                stepManager.SetStepCompletion(true);
-            }
+            // // Auto-complete the permissions step since it's just informational
+            // if (stepIndex == 6) // Permissions step
+            // {
+            //     stepManager.SetStepCompletion(true);
+            // }
         }
 
         private void OnDoneButtonClicked()
