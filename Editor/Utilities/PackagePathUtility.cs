@@ -211,6 +211,8 @@ public static class PackagePathUtility
     }
 
     private static bool VerboseLogging => EditorPrefs.GetBool(VerboseModeKey, false);
+    
+    private static bool DeveloperMode => EditorPrefs.GetBool(DeveloperModeKey, false);
 
     public static void LogDebug(string message, bool onlyInVerbose = true)
     {
