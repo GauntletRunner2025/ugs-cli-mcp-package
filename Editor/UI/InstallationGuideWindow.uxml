@@ -83,12 +83,12 @@
                 <engine:ScrollView style="flex-grow: 1; margin-bottom: 20px; background-color: rgb(40, 40, 40); padding: 10px; border-radius: 3px;">
                     <engine:Label name="permissions-list" style="white-space: pre; -unity-font-style: normal; color: rgb(200, 200, 200);" />
                 </engine:ScrollView>
-                <engine:Button text="Done" name="done-button" style="margin-top: 20px;" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement class="button-container" style="flex-direction: row; align-items: center; justify-content: space-between;">
             <engine:Button text="Previous" name="previous-button" />
             <engine:Button text="Next" name="next-button" />
+            <engine:Button text="Done" name="done-button" style="display: none;" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>
