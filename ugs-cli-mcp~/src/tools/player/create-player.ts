@@ -11,18 +11,29 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Helper function to write to log file
 const writeToLog = async (data: any) => {
-    const logDir = path.join(__dirname, '../../../logs');
-    const logFile = path.join(logDir, 'create-player.log');
+    try {
+        // Use absolute path to ensure logs directory is created in the right place
+        const logDir = path.resolve(process.cwd(), 'logs');
+        const logFile = path.join(logDir, 'create-player.log');
 
-    // Ensure log directory exists
-    if (!fs.existsSync(logDir)) {
-        fs.mkdirSync(logDir, { recursive: true });
+        console.log(`Writing logs to: ${logFile}`);
+
+        // Ensure log directory exists
+        if (!fs.existsSync(logDir)) {
+            console.log(`Creating log directory: ${logDir}`);
+            fs.mkdirSync(logDir, { recursive: true });
+        }
+
+        const timestamp = new Date().toISOString();
+        const logEntry = `[${timestamp}] ${JSON.stringify(data, null, 2)}\n`;
+
+        await fs.promises.appendFile(logFile, logEntry);
+        console.log('Log entry written successfully');
+        return true;
+    } catch (error) {
+        console.error('Error writing to log:', error);
+        return false;
     }
-
-    const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${JSON.stringify(data, null, 2)}\n`;
-
-    await fs.promises.appendFile(logFile, logEntry);
 };
 
 export function registerCreatePlayer(server: McpServer) {
@@ -30,39 +41,60 @@ export function registerCreatePlayer(server: McpServer) {
         "create-player",
         "Create an anonymous player account",
         async () => {
+            console.log('Starting create-player tool execution');
             try {
+                console.log('Executing UGS player create command');
                 const { stdout, stderr } = await execAsync('ugs player create --json');
 
+                console.log('Command executed, raw stdout:', stdout);
+
                 // Add a delay of 1 second before processing the output
-                await sleep(2000);
+                await sleep(1000);
 
                 if (stderr) {
-                    console.error('Error output:', stderr);
+                    console.error('Error output from command:', stderr);
                 }
 
                 // Split the output into lines and skip the first 'null' line
                 const lines = stdout.split('\n').filter(line => line.trim() !== 'null');
                 const jsonText = lines.join('\n').trim();
+                
+                console.log('Processed output for parsing:', jsonText);
 
                 try {
                     const jsonOutput = JSON.parse(jsonText);
-                    // console.log('Parsed output:', jsonOutput);
-                    await writeToLog(jsonOutput);
+                    console.log('Successfully parsed JSON output');
+                    
+                    // Try to write to log and capture success/failure
+                    const logSuccess = await writeToLog(jsonOutput);
+                    if (!logSuccess) {
+                        console.warn('Failed to write to log file, but continuing execution');
+                    }
+                    
                     return {
-                        content: [{ type: "text", text: JSON.stringify(jsonOutput, null, 2) }]
+                        content: [{ 
+                            type: "text", 
+                            text: `Player created successfully: ${JSON.stringify(jsonOutput, null, 2)}` 
+                        }]
                     };
                 } catch (parseError) {
+                    console.error('JSON parsing error:', parseError);
                     // If JSON parsing fails, return the full output except the null line
-                    console.log('Raw output:', jsonText);
                     return {
-                        content: [{ type: "text", text: jsonText }]
+                        content: [{ 
+                            type: "text", 
+                            text: `Received output (could not parse as JSON): ${jsonText}` 
+                        }]
                     };
                 }
 
             } catch (error: any) {
                 console.error('Execution error:', error);
                 return {
-                    content: [{ type: "text", text: `Error: ${error?.message || String(error)}` }]
+                    content: [{ 
+                        type: "text", 
+                        text: `Error creating player: ${error?.message || String(error)}` 
+                    }]
                 };
             }
         }
