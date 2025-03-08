@@ -3,9 +3,43 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using System;
 using System.Diagnostics;
+using System.IO;
+using Debug = UnityEngine.Debug;
 
     public partial class InstallationGuideWindow : BaseInstallationWindow
     {
+        private const string VerboseModeKey = "MCPVerboseLogging";
+        private static bool VerboseLogging => EditorPrefs.GetBool(VerboseModeKey, false);
+        private static string LogFilePath 
+        {
+            get 
+            {
+                string projectPath = Path.GetDirectoryName(Application.dataPath);
+                return Path.Combine(projectPath, "mcp_installation_debug.log");
+            }
+        }
+
+        private static void LogDebug(string message, bool onlyInVerbose = true)
+        {
+            if (onlyInVerbose && !VerboseLogging)
+                return;
+
+            try 
+            {
+                string logMessage = $" {message}";
+                File.AppendAllText(LogFilePath, logMessage + "\n");
+                
+                if (!onlyInVerbose || VerboseLogging)
+                {
+                    Debug.Log($"[MCP Installation] {message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to write to MCP installation debug log: {ex.Message}");
+            }
+        }
+
         private Button previousButton;
         private Button nextButton;
         private Button checkVersionButton;

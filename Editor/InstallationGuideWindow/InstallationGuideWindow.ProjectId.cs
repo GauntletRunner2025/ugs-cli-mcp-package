@@ -87,8 +87,8 @@ using System.Collections.Generic;
                     var outputText = output.ToString().Trim();
                     var errorText = error.ToString().Trim();
 
-                    Debug.Log($"Fetch Environments Output: '{outputText}'");
-                    Debug.Log($"Fetch Environments Error: '{errorText}'");
+                    LogDebug($"Fetch Environments Output: '{outputText}'", true);
+                    LogDebug($"Fetch Environments Error: '{errorText}'", true);
 
                     // Combine output and error since UGS CLI uses [Error] and [Information] prefixes
                     var combinedText = $"{outputText} {errorText}".Trim();
@@ -212,8 +212,8 @@ using System.Collections.Generic;
                     var outputText = output.ToString().Trim();
                     var errorText = error.ToString().Trim();
 
-                    Debug.Log($"Set Project ID Output: '{outputText}'");
-                    Debug.Log($"Set Project ID Error: '{errorText}'");
+                    LogDebug($"Set Project ID Output: '{outputText}'", true);
+                    LogDebug($"Set Project ID Error: '{errorText}'", true);
 
                     // Combine output and error since UGS CLI uses [Error] and [Information] prefixes
                     var combinedText = $"{outputText} {errorText}".Trim();
@@ -222,7 +222,7 @@ using System.Collections.Generic;
                     {
                         projectIdResultLabel.text = $"✓ Successfully set project ID to: {projectId}";
                         projectIdResultLabel.style.color = new Color(0.2f, 0.8f, 0.2f);
-                        Debug.Log("Project ID set successfully, completing step 3");
+                        LogDebug("Project ID set successfully, completing step 3", false);
                         stepManager.SetStepCompletion(true);
 
                         // Verify the setting
@@ -306,8 +306,8 @@ using System.Collections.Generic;
                     var outputText = output.ToString().Trim();
                     var errorText = error.ToString().Trim();
 
-                    Debug.Log($"Set Environment Output: '{outputText}'");
-                    Debug.Log($"Set Environment Error: '{errorText}'");
+                    LogDebug($"Set Environment Output: '{outputText}'", true);
+                    LogDebug($"Set Environment Error: '{errorText}'", true);
 
                     // Combine output and error since UGS CLI uses [Error] and [Information] prefixes
                     var combinedText = $"{outputText} {errorText}".Trim();
@@ -391,8 +391,8 @@ using System.Collections.Generic;
                     var errorText = error.ToString().Trim();
                     var environmentName = environmentNameDropdown.value;
 
-                    Debug.Log($"Verify Environment Output: '{outputText}'");
-                    Debug.Log($"Verify Environment Error: '{errorText}'");
+                    LogDebug($"Verify Environment Output: '{outputText}'", true);
+                    LogDebug($"Verify Environment Error: '{errorText}'", true);
 
                     // Combine output and error since UGS CLI uses [Error] and [Information] prefixes
                     var combinedText = $"{outputText} {errorText}".Trim();
@@ -428,7 +428,7 @@ using System.Collections.Generic;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Error verifying environment: {ex.Message}");
+                LogDebug($"Error verifying environment: {ex.Message}", true);
             }
         }
 
@@ -475,8 +475,8 @@ using System.Collections.Generic;
                     var errorText = error.ToString().Trim();
                     var projectId = CloudProjectSettings.projectId;
 
-                    Debug.Log($"Verify Project ID Output: '{outputText}'");
-                    Debug.Log($"Verify Project ID Error: '{errorText}'");
+                    LogDebug($"Verify Project ID Output: '{outputText}'", true);
+                    LogDebug($"Verify Project ID Error: '{errorText}'", true);
 
                     // Combine output and error since UGS CLI uses [Error] and [Information] prefixes
                     var combinedText = $"{outputText} {errorText}".Trim();
@@ -507,7 +507,7 @@ using System.Collections.Generic;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Error verifying project ID: {ex.Message}");
+                LogDebug($"Error verifying project ID: {ex.Message}", true);
             }
         }
     }

@@ -35,7 +35,7 @@ using UnityEngine.UIElements;
 
         private void SimulateUgsNotInstalled()
         {
-            Debug.Log("Simulating UGS CLI not installed");
+            LogDebug("Simulating UGS CLI not installed", false);
             versionResultLabel.text = "UGS CLI is not installed";
             versionResultLabel.style.color = Color.red;
             npmCheckContainer.style.display = DisplayStyle.Flex;

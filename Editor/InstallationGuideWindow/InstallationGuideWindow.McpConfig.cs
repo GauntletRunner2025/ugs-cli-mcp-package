@@ -38,7 +38,7 @@ using System.Collections.Generic;
 
                 if (File.Exists(configPath))
                 {
-                    Debug.Log($"MCP config file found at: {configPath}");
+                    LogDebug($"MCP config file found at: {configPath}", true);
                     string jsonContent = File.ReadAllText(configPath);
                     var config = JsonConvert.DeserializeObject<McpConfig>(jsonContent);
 
@@ -78,7 +78,7 @@ using System.Collections.Generic;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Error checking MCP config: {ex}");
+                LogDebug($"Error checking MCP config: {ex}", false);
                 mcpConfigResultLabel.text = $"Error checking MCP config: {ex.Message}";
                 mcpConfigResultLabel.style.color = new Color(0.8f, 0.2f, 0.2f);
                 stepManager.SetStepCompletion(false);
@@ -136,10 +136,10 @@ using System.Collections.Generic;
                 string newJsonContent = JsonConvert.SerializeObject(config, Formatting.Indented);
                 File.WriteAllText(configPath, newJsonContent);
 
-                mcpConfigResultLabel.text = "✓ Successfully added UGS CLI MCP server";
+                mcpConfigResultLabel.text = "✓ MCP server added successfully";
                 mcpConfigResultLabel.style.color = new Color(0.2f, 0.8f, 0.2f);
                 addMcpServerButton.style.display = DisplayStyle.None;
-                Debug.Log("MCP server added successfully, completing step");
+                LogDebug("MCP server added successfully, completing step", false);
                 stepManager.SetStepCompletion(true);
 
                 // Re-check config to verify
@@ -147,7 +147,7 @@ using System.Collections.Generic;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Error adding MCP server: {ex}");
+                LogDebug($"Error adding MCP server: {ex}", false);
                 mcpConfigResultLabel.text = $"Error adding MCP server: {ex.Message}";
                 mcpConfigResultLabel.style.color = new Color(0.8f, 0.2f, 0.2f);
                 stepManager.SetStepCompletion(false);

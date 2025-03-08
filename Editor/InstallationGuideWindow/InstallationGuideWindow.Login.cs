@@ -61,16 +61,15 @@ using UnityEngine.UIElements;
                     outputText = outputText.Replace("\r", "").Replace("\n", " ").Trim();
                     errorText = errorText.Replace("\r", "").Replace("\n", " ").Trim();
                     
-                    Debug.Log($"UGS Status Output (cleaned): '{outputText}'");
-                    Debug.Log($"UGS Status Error (cleaned): '{errorText}'");
+                    LogDebug($"UGS Status Output (cleaned): '{outputText}'", true);
+                    LogDebug($"UGS Status Error (cleaned): '{errorText}'", true);
 
                     // Check both output and error streams
-                    var combinedText = $"{outputText} {errorText}";
-                    loginStatusResultLabel.text = combinedText.Trim();
+                    var combinedText = $"{outputText} {errorText}".Trim();
 
                     if (combinedText.Contains("[Information]") && combinedText.Contains("No Service Account key stored"))
                     {
-                        Debug.Log("Login check: Found not logged in message");
+                        LogDebug("Login check: Found not logged in message", true);
                         // Not logged in - show login container and button
                         loginStatusResultLabel.style.color = new Color(0.8f, 0.2f, 0.2f);
                         loginContainer.style.display = DisplayStyle.Flex;
@@ -79,7 +78,7 @@ using UnityEngine.UIElements;
                     }
                     else if (combinedText.Contains("[Information]") && combinedText.Contains("Using Service Account key"))
                     {
-                        Debug.Log("Login check: Found success message");
+                        LogDebug("Login check: Found success message", true);
                         // Successfully logged in
                         loginStatusResultLabel.style.color = new Color(0.2f, 0.8f, 0.2f);
                         loginContainer.style.display = DisplayStyle.None;
@@ -87,7 +86,7 @@ using UnityEngine.UIElements;
                     }
                     else
                     {
-                        Debug.Log("Login check: Unexpected response");
+                        LogDebug("Login check: Unexpected response", true);
                         // Unexpected response
                         loginStatusResultLabel.style.color = Color.yellow;
                         loginContainer.style.display = DisplayStyle.None;
