@@ -6,7 +6,7 @@ using UnityEditor;
     public class InstallationStepManager
     {
         private readonly VisualElement rootElement;
-        private readonly string[] steps = { "step-1", "step-2", "step-3", "step-4", "step-5", "step-6" };
+        private readonly string[] steps = { "step-1", "step-2", "step-3", "step-4", "step-5", "step-6", "step-7" };
         private readonly bool[] stepCompleted;
         private int currentStep = 0;
 

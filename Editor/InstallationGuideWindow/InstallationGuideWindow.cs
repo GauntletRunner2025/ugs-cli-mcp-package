@@ -123,14 +123,12 @@ using Debug = UnityEngine.Debug;
             if (permissionsList != null)
             {
                 var permissions = new System.Text.StringBuilder();
-                permissions.AppendLine("Player module\t\t");
-                permissions.AppendLine("\t\tAuthentication Admin");
-                permissions.AppendLine("\t\tAuthentication Editor");
-
-                permissions.AppendLine("delete-player\t\tDelete existing players");
-                permissions.AppendLine("enable-player\t\tEnable/disable players");
-                permissions.AppendLine("get-player\t\tView player information");
-                permissions.AppendLine("list-player\t\tList all players");
+                permissions.AppendLine("Player Management Commands:");
+                permissions.AppendLine("  create-player\t\tAuthentication Admin, Authentication Editor");
+                permissions.AppendLine("  delete-player\t\tAuthentication Admin");
+                permissions.AppendLine("  enable-player\t\tAuthentication Admin");
+                permissions.AppendLine("  get-player\t\tAuthentication Editor");
+                permissions.AppendLine("  list-player\t\tAuthentication Editor");
                 permissionsList.text = permissions.ToString();
             }
         }
