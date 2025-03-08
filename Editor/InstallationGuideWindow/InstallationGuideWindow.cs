@@ -123,12 +123,13 @@ using Debug = UnityEngine.Debug;
             if (permissionsList != null)
             {
                 var permissions = new System.Text.StringBuilder();
+
                 permissions.AppendLine("Player Management Commands:");
-                permissions.AppendLine("  create-player\t\tAuthentication Admin, Authentication Editor");
-                permissions.AppendLine("  delete-player\t\tAuthentication Admin");
-                permissions.AppendLine("  enable-player\t\tAuthentication Admin");
-                permissions.AppendLine("  get-player\t\tAuthentication Editor");
-                permissions.AppendLine("  list-player\t\tAuthentication Editor");
+                permissions.AppendLine("\tLive Ops -> Authentication Admin");
+                permissions.AppendLine("\tLive Ops -> Authentication Editor");
+                permissions.AppendLine("");
+
+
                 permissionsList.text = permissions.ToString();
             }
         }
@@ -139,17 +140,10 @@ using Debug = UnityEngine.Debug;
             nextButton.text = isLastStep ? "Done" : "Next";
             nextButton.style.display = isLastStep ? DisplayStyle.None : DisplayStyle.Flex;
             doneButton.style.display = isLastStep ? DisplayStyle.Flex : DisplayStyle.None;
-
-            // // Auto-complete the permissions step since it's just informational
-            // if (stepIndex == 6) // Permissions step
-            // {
-            //     stepManager.SetStepCompletion(true);
-            // }
         }
 
         private void OnDoneButtonClicked()
         {
-            // throw new NotImplementedException();
             //Close the Editor Window
             Close();
         }
