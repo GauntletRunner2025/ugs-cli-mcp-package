@@ -121,7 +121,7 @@ using System.Collections.Generic;
                     Command = "node",
                     Args = new List<string>
                     {
-                        Path.Combine(Application.dataPath, "ugs-cli-mcp-package", "ugs-cli-mcp~", "build", "index.js").Replace("/", "\\")
+                        Path.Combine(PackagePathUtility.GetPackagePath(), "ugs-cli-mcp~", "build", "index.js").Replace("/", "\\")
                     }
                 };
 

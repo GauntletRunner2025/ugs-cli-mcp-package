@@ -11,8 +11,6 @@ using Debug = UnityEngine.Debug;
 public static class PackagePathUtility
 {
     private static readonly string[] PackageNames = new string[] {
-        "ugs-cli-mcp-package", 
-        "ugs-cli-mcp-core",
         "com.gauntletrunner2025.ugs-cli-mcp-core"
     };
     private static readonly string AssetsPath = Path.Combine("Assets", "ugs-cli-mcp-package");
@@ -140,26 +138,38 @@ public static class PackagePathUtility
     {
         try
         {
-            // Try each package name variant
-            foreach (string packageName in PackageNames)
+            // Try direct package cache scan first
+            string projectPath = Path.GetDirectoryName(Application.dataPath);
+            string packageCachePath = Path.Combine(projectPath, "Library", "PackageCache");
+            LogDebug($"scanning package cache: {packageCachePath}");
+            
+            if (Directory.Exists(packageCachePath))
             {
-                LogDebug($"trying to find package with name: {packageName}");
-                
-                // Try the standard package manager path first
-                var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(Path.Combine("Packages", packageName));
-                if (packageInfo != null)
+                foreach (string dir in Directory.GetDirectories(packageCachePath))
                 {
-                    LogDebug($"package info found: {packageInfo.name} at {packageInfo.resolvedPath}");
-                    LogDebug($"package source: {packageInfo.source}, Version: {packageInfo.version}");
-                    
-                    if (Directory.Exists(packageInfo.resolvedPath))
+                    string dirName = Path.GetFileName(dir);
+                    if (dirName.StartsWith(PackageNames[0]))
                     {
-                        return packageInfo.resolvedPath;
+                        LogDebug($"found matching package in cache: {dir}");
+                        return dir;
                     }
-                    else
-                    {
-                        LogDebug($"package resolvedPath directory does not exist: {packageInfo.resolvedPath}");
-                    }
+                }
+            }
+
+            // Try the standard package manager path
+            var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(Path.Combine("Packages", PackageNames[0]));
+            if (packageInfo != null)
+            {
+                LogDebug($"package info found: {packageInfo.name} at {packageInfo.resolvedPath}");
+                LogDebug($"package source: {packageInfo.source}, Version: {packageInfo.version}");
+                
+                if (Directory.Exists(packageInfo.resolvedPath))
+                {
+                    return packageInfo.resolvedPath;
+                }
+                else
+                {
+                    LogDebug($"package resolvedPath directory does not exist: {packageInfo.resolvedPath}");
                 }
             }
             
