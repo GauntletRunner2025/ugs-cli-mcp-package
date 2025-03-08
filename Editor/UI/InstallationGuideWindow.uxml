@@ -76,15 +76,15 @@
             </engine:VisualElement>
             <engine:VisualElement name="step-7" style="flex-grow: 1; display: none;">
                 <engine:Label text="Step 7: Required Permissions" class="header" style="margin-bottom: 10px;" />
-                <engine:Label text="Important: Configure the following permissions in the Unity Dashboard for this project:" style="margin-bottom: 10px; white-space: normal; -unity-font-style: bold;" />
-                <engine:Label text="1. Go to the cloud.unity.com" style="margin-bottom: 5px; white-space: normal;" />
-                <engine:Label text="2. Click on Administration" style="margin-bottom: 5px; white-space: normal;" />
-                <engine:Label text="3. Click on Service Accounts" style="margin-bottom: 5px; white-space: normal;" />
-                <engine:Label text="4. Click on the Service Account you set the Key Id and Secret for in the previous step" style="margin-bottom: 5px; white-space: normal;" />
-                <engine:Label text="5. Scroll down to Project Roles and click Manage Project Roles" style="margin-bottom: 5px; white-space: normal;" />
-                <engine:Label text="6. Select the current project" style="margin-bottom: 5px; white-space: normal;" />
-                <engine:Label text="7. Add the following permissions for this project:" style="margin-bottom: 20px; white-space: normal;" />
                 <engine:ScrollView style="flex-grow: 1; margin-bottom: 20px; background-color: rgb(40, 40, 40); padding: 10px; border-radius: 3px;">
+                    <engine:Label text="Important: Configure the following permissions in the Unity Dashboard for this project:" style="margin-bottom: 10px; white-space: normal; -unity-font-style: bold; color: rgb(200, 200, 200);" />
+                    <engine:Label text="1. Go to the cloud.unity.com" style="margin-bottom: 5px; white-space: normal; color: rgb(200, 200, 200);" />
+                    <engine:Label text="2. Click on Administration" style="margin-bottom: 5px; white-space: normal; color: rgb(200, 200, 200);" />
+                    <engine:Label text="3. Click on Service Accounts" style="margin-bottom: 5px; white-space: normal; color: rgb(200, 200, 200);" />
+                    <engine:Label text="4. Click on the Service Account you set the Key Id and Secret for in the previous step" style="margin-bottom: 5px; white-space: normal; color: rgb(200, 200, 200);" />
+                    <engine:Label text="5. Scroll down to Project Roles and click Manage Project Roles" style="margin-bottom: 5px; white-space: normal; color: rgb(200, 200, 200);" />
+                    <engine:Label text="6. Select the current project" style="margin-bottom: 5px; white-space: normal; color: rgb(200, 200, 200);" />
+                    <engine:Label text="7. Add the following permissions for this project:" style="margin-bottom: 20px; white-space: normal; color: rgb(200, 200, 200);" />
                     <engine:Label name="permissions-list" style="white-space: pre; -unity-font-style: normal; color: rgb(200, 200, 200);" />
                 </engine:ScrollView>
             </engine:VisualElement>
