@@ -96,4 +96,80 @@ public static class McpConfigUtility
     }
 
     public static bool IsUgsCliMcpServer(string serverKey) => serverKey == UgsCliMcpServerKey;
+    
+    /// <summary>
+    /// Checks if the UGS CLI MCP server in the config file points to the current package.
+    /// </summary>
+    /// <param name="config">The MCP configuration to check</param>
+    /// <returns>True if the server points to the current package, false otherwise</returns>
+    public static bool IsUgsCliMcpServerPointingToCurrentPackage(McpConfig config)
+    {
+        if (config?.McpServers == null || !config.McpServers.TryGetValue(UgsCliMcpServerKey, out var serverConfig))
+        {
+            return false;
+        }
+        
+        if (serverConfig.Args == null || serverConfig.Args.Count == 0)
+        {
+            return false;
+        }
+        
+        // Get the configured path from the args
+        string configuredPath = serverConfig.Args[0];
+        if (string.IsNullOrEmpty(configuredPath))
+        {
+            return false;
+        }
+        
+        try
+        {
+            // Get the current package path
+            string currentPackagePath = PackagePathUtility.GetPackagePath();
+            if (string.IsNullOrEmpty(currentPackagePath))
+            {
+                return false;
+            }
+            
+            // Construct the expected path to index.js
+            string expectedPath = Path.Combine(currentPackagePath, "ugs-cli-mcp~", "build", "index.js");
+            
+            // Normalize paths for comparison (handle different slashes)
+            configuredPath = Path.GetFullPath(configuredPath);
+            expectedPath = Path.GetFullPath(expectedPath);
+            
+            // Compare the paths
+            return string.Equals(configuredPath, expectedPath, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error checking if UGS CLI MCP server points to current package: {ex.Message}");
+            return false;
+        }
+    }
+    
+    /// <summary>
+    /// Loads the MCP configuration from the global config file.
+    /// </summary>
+    /// <returns>The loaded MCP configuration, or null if it couldn't be loaded</returns>
+    public static McpConfig LoadGlobalConfig()
+    {
+        try
+        {
+            string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string globalConfigPath = Path.Combine(userProfilePath, ConfigSubPath, GlobalConfigFileName);
+            
+            if (!File.Exists(globalConfigPath))
+            {
+                return null;
+            }
+            
+            string jsonContent = File.ReadAllText(globalConfigPath);
+            return JsonConvert.DeserializeObject<McpConfig>(jsonContent);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to load MCP config: {ex.Message}");
+            return null;
+        }
+    }
 }

@@ -47,10 +47,22 @@ using System.Collections.Generic;
                         bool hasUgsCliMcp = config.McpServers.Keys.Any(McpConfigUtility.IsUgsCliMcpServer);
                         if (hasUgsCliMcp)
                         {
-                            var serverConfig = config.McpServers.First(kvp => McpConfigUtility.IsUgsCliMcpServer(kvp.Key)).Value;
-                            mcpConfigResultLabel.text = "✓ UGS CLI MCP server is already configured";
-                            mcpConfigResultLabel.style.color = new Color(0.2f, 0.8f, 0.2f);
-                            stepManager.SetStepCompletion(true);
+                            // Check if the server points to the current package
+                            bool pointsToCurrentPackage = McpConfigUtility.IsUgsCliMcpServerPointingToCurrentPackage(config);
+                            
+                            if (pointsToCurrentPackage)
+                            {
+                                mcpConfigResultLabel.text = "✓ UGS CLI MCP server is correctly configured";
+                                mcpConfigResultLabel.style.color = new Color(0.2f, 0.8f, 0.2f);
+                                stepManager.SetStepCompletion(true);
+                            }
+                            else
+                            {
+                                mcpConfigResultLabel.text = "UGS CLI MCP server exists but points to a different package version.";
+                                mcpConfigResultLabel.style.color = Color.yellow;
+                                addMcpServerButton.style.display = DisplayStyle.Flex;
+                                stepManager.SetStepCompletion(false);
+                            }
                         }
                         else
                         {
