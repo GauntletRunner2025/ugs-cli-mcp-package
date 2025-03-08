@@ -1,11 +1,29 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import * as fs from 'fs';
+import * as path from 'path';
 
 const execAsync = promisify(exec);
 
 // Helper function to create a delay
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Helper function to write to log file
+const writeToLog = async (data: any) => {
+    const logDir = path.join(__dirname, '../../../logs');
+    const logFile = path.join(logDir, 'create-player.log');
+
+    // Ensure log directory exists
+    if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir, { recursive: true });
+    }
+
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${JSON.stringify(data, null, 2)}\n`;
+
+    await fs.promises.appendFile(logFile, logEntry);
+};
 
 export function registerCreatePlayer(server: McpServer) {
     server.tool(
@@ -28,7 +46,8 @@ export function registerCreatePlayer(server: McpServer) {
 
                 try {
                     const jsonOutput = JSON.parse(jsonText);
-                    console.log('Parsed output:', jsonOutput);
+                    // console.log('Parsed output:', jsonOutput);
+                    await writeToLog(jsonOutput);
                     return {
                         content: [{ type: "text", text: JSON.stringify(jsonOutput, null, 2) }]
                     };
