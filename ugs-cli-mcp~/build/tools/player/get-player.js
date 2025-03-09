@@ -1,15 +1,18 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import { z } from "zod";
+import { writeToLog, LogType } from "../../utils/logger.js";
 const execAsync = promisify(exec);
 export function registerGetPlayer(server) {
     server.tool("get-player", "Shows an existing player account information", {
         "playerId": z.string().describe("The ID of the player to retrieve")
     }, async ({ playerId }) => {
         try {
-            const { stdout, stderr } = await execAsync(`ugs player get ${playerId}`);
+            const { stdout, stderr } = await execAsync(`ugs player get ${playerId} --json`);
+            await writeToLog(stdout, LogType.STDOUT);
+            await writeToLog(stderr, LogType.STDERR);
             return {
-                content: [{ type: "text", text: stdout.trim() || `Error: ${stderr}` }]
+                content: [{ type: "text", text: stdout }]
             };
         }
         catch (error) {
